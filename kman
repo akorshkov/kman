@@ -1,0 +1,184 @@
+#!/usr/bin/env python
+"""Cheatsheets helper.
+
+Displays my own cheatsheets for miscellaneous topics.
+"""
+
+import sys
+import os.path
+import re
+
+import argparse
+import logging
+
+logger = logging.getLogger('kman')
+
+
+_COLORS = {
+    'BLACK'  : "\033[1;30m", 'D_BLACK'  : "\033[2;30m",
+    'RED'    : "\033[1;31m", 'D_RED'    : "\033[2;31m",
+    'GREEN'  : "\033[1;32m", 'D_GREEN'  : "\033[2;32m",
+    'YELLOW' : "\033[1;33m", 'D_YELLOW' : "\033[2;33m",
+    'BLUE'   : "\033[1;34m", 'D_BLUE'   : "\033[2;34m",
+    'MAGENTA': "\033[1;35m", 'D_MAGENTA': "\033[2;35m",
+    'CYAN'   : "\033[1;36m", 'D_CYAN'   : "\033[2;36m",
+    'WHITE'  : "\033[1;37m", 'D_WHITE'  : "\033[2;37m",
+
+    'CLRBLD' : "\033[2m",
+    'CLREND' : "\033[0m",
+}
+
+
+class _TopicFormatter():
+    # Colorize strings.
+    #
+    # Used to color-format cheatsheet topics.
+
+    _TOKEN_COLORS = {
+        'title':   _COLORS['D_YELLOW'],
+        'table':   _COLORS['D_GREEN'],
+        'note':    _COLORS['GREEN'],
+        'comment': _COLORS['BLUE'],
+        'keyword': _COLORS['CYAN'],
+    }
+
+    def __init__(self, _topic_header_lines):
+        """Constructor of _TopicFormatter.
+
+        Arguments:
+        - _topic_header_lines: list of strings which contain formatter
+            configuration directives. Processing of these directives is
+            not implemented yet.
+        """
+        keywords = ['git', 'ps', 'apt', 'yum']  # so far hardcoded
+        patterns = [
+            # title example: = some text =
+            # (start or lookbehind '|')some text(lookahead spaces + end or '|')
+            r"(?P<title>(^|(?<=\|))=[^|=]+=(?=\s*($|\|)))",
+            # table: long srings of "====" or '|'
+            r"(?P<table>={3,}|\|)",
+            # note example: > note text
+            # (start or lookbehind '|')> the text(lookahead spaces + end or '|')
+            r"(?P<note>(^|(?<=\|))>[^|]*)",
+            # comment example: .... <- comment here
+            r"(?P<comment> <- [^|]*)",
+        ]
+        if keywords:
+            patterns.append(
+                r"(?P<keyword>"
+                + "|".join(
+                    # (start or lookbehind space)text(end or lookahead space)
+                    r"(^|(?<=\s)){}($|(?=\s))".format(kw)
+                    for kw in keywords)
+                + ")")
+
+        self._tokenizer = re.compile("|".join(p for p in patterns))
+
+    def format_topic_line(self, topic_line):
+        """Returns colorized string"""
+        return "".join(part for part in self._generate_string_parts(topic_line))
+
+    def _generate_string_parts(self, topic_line):
+        # parse 'topic_line' string and generate colored parts
+        pos = 0
+        for match in self._tokenizer.finditer(topic_line):
+            m_start, m_end = match.span()
+            if pos < m_start:
+                yield topic_line[pos:m_start]
+
+            for part in self._generate_token_parts(match):
+                yield part
+
+            pos = m_end
+
+        if pos == 0:
+            yield topic_line
+        elif pos < len(topic_line):
+            yield topic_line[pos:]
+
+    def _generate_token_parts(self, match):
+        # generate parts of string corresponding to s single token
+        m_start, m_end = match.span()
+        if match.lastgroup == 'title':
+            # special case: '=' characters of the title are not colorized
+            yield "="
+            yield self._TOKEN_COLORS[match.lastgroup]
+            yield match.string[m_start+1:m_end-1]
+            yield _COLORS["CLREND"]
+            yield "="
+        else:
+            yield self._TOKEN_COLORS[match.lastgroup]
+            yield match.string[m_start:m_end]
+            yield _COLORS["CLREND"]
+
+
+def do_print_topic(topic_name):
+    """Find ad print topic."""
+    topic_file_path, examined_dirs = _find_topic_file(topic_name)
+
+    if topic_file_path is None:
+        logger.error("Topic '%s' not found. Examined directories: %s",
+                     topic_name, examined_dirs)
+        sys.exit(1)
+
+    formatter = None
+    reading_topic_meta = True
+    topic_header_lines = []
+    for line in open(topic_file_path):
+        line = line.rstrip()
+        if reading_topic_meta:
+            # still reading the "header" part of the topic
+            # which contains some meta information
+            if line.startswith('--'):
+                topic_header_lines.append(line)
+                continue
+            else:
+                formatter = _TopicFormatter(topic_header_lines)
+                reading_topic_meta = False
+
+        print(formatter.format_topic_line(line))
+
+
+def _find_topic_file(topic_name):
+    # find file by topic name
+    topic_filename = topic_name + ".topic"
+    examined_dirs = []
+    for dir_name in ["~/.kman/topics", ]:
+        dir_name = os.path.normpath(os.path.expanduser(dir_name))
+        examined_dirs.append(dir_name)
+        topic_file_path = os.path.join(dir_name, topic_filename)
+        if os.path.exists(topic_file_path):
+            return topic_file_path, examined_dirs
+
+    return None, examined_dirs
+
+
+def main():
+    """kman - print cheatsheet topic or list of topics."""
+    # parse cmdline arguments
+    parser = argparse.ArgumentParser(
+        description="Display cheatsheets for miscelaneous topics",
+        epilog=("If the topic is not specified prints the list of "
+                "available topics")
+    )
+
+    parser.add_argument("-v", "--verbose", action='store_true',
+                        help="print some debug data")
+
+    parser.add_argument("topic", nargs='?',
+                        help="the topic to display cheatsheet about")
+
+    args = parser.parse_args()
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.WARNING)
+
+    # and do the job
+    if args.topic is None:
+        assert False, "Not implemented."
+    else:
+        do_print_topic(args.topic)
+
+
+if __name__ == '__main__':
+    main()

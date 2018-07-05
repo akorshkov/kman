@@ -1,0 +1,24 @@
+-- this is test topic
+-- still header metadata
+
+Example of kman cheatsheet topic
+= title =
+> some note
+Usual text contains git keyword
+Text with git keyword  <- and comment
+
+Example of table:
+======================================
+= here =         | nonono
+some text        |= title =
+= title =        |= title =
+ = still text =  | = still text =
+code <- comment  | other text
+code <- comment  | more code <- and comment
+text             | more code <- and comment
+> note           | text
+> note           |> note
+text             |> note
+  > text         | > text
+some git keyword | not-a-git git-not
+git keyword      | end-of-line kw git
