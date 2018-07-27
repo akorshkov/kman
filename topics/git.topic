@@ -1,0 +1,13 @@
+-- git topic
+=====================================================================================================================================================
+= Common operation =                                                      |
+> amend options
+git commit --amend --no-edit --date=now
+
+= Rebase tricks =
+> update commit time during rebase
+git rebase -i HEAD~2 --exec "git commit --amend --date=now --no-edit"
+> rename during rebase
+
+
+= log =

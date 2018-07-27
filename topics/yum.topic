@@ -1,0 +1,10 @@
+-- yum - package manager in CentOS
+
+==========================================================================================
+= general =
+sudo yum update       <- update everything
+sudo yum upgrade      <- same, but forces removal of obsolete packages
+
+==========================================================================================
+= search commands =
+yum provides \*bin/htpasswd   <- look for a distro which provides this file
