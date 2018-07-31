@@ -1,13 +1,26 @@
 -- git topic
 =====================================================================================================================================================
+= ~/.gitconfig =
+[format]
+	pretty = tformat:%C(yellow)%H %C(blue)%<(21)%ad%C(green)%<(20)%an%C(yellow)%d%C(white)%s%C(reset)
+[log]
+	date = format:%Y-%m-%d %H:%M:%S
+[core]
+	editor = vim
+	pager =
+=====================================================================================================================================================
 = Common operation =                                                      |
 > amend options
 git commit --amend --no-edit --date=now
 
 = Rebase tricks =
-> update commit time during rebase
-git rebase -i HEAD~2 --exec "git commit --amend --date=now --no-edit"
-> rename during rebase
-
+> update commit time (and rename) during rebase
+git rebase -i HEAD~5 --exec "git commit --amend --date=now --no-edit"
+> produces todo-list like
+pick 8d7c8b7 old_descr
+exec git commit --amend --date=now --no-edit <- or -m"new descr"
+...
 
 = log =
+git log -G'pattern' -- path/to/file <- commits that contain 'pattern'
+git log -S'pattern' -- path/to/file <- .. changed number of occurencies
