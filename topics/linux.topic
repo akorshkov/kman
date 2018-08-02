@@ -1,0 +1,5 @@
+-- misc linux admin commands
+
+=====================================================
+= dd =                                              |
+sudo dd bs=4M if=/path/to.iso of=/dev/sdb; sync     |
