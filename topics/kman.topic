@@ -21,5 +21,5 @@ text             | more code <- and comment
 text             |> note
   > text         | > text
 some git keyword | not-a-git
-git-sub-cmd kw   |
+git-sub-cmd kw   |git kw in table
 git keyword      | end-of-line kw git
