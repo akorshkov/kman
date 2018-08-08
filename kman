@@ -67,8 +67,8 @@ class _TopicFormatter():
             patterns.append(
                 r"(?P<keyword>"
                 + "|".join(
-                    # (start or lookbehind space)text(end or lookahead space)
-                    r"(^|(?<=\s)){}($|(?=\s))".format(kw)
+                    # (start or lookbehind space)text(-optional-suffix)(end or lookahead space)
+                    r"(^|(?<=\s)){}(-[-a-zA-Z]*)?($|(?=\s))".format(kw)
                     for kw in keywords)
                 + ")")
 

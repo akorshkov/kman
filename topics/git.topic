@@ -9,9 +9,9 @@
 	editor = vim
 	pager =
 =====================================================================================================================================================
-= Common operation =                                                      |
-> amend options
-git commit --amend --no-edit --date=now
+= Common operation =                                                      |= reflog =
+> amend options                                                           |git reflog show -n10
+git commit --amend --no-edit --date=now                                   |
 
 = Rebase tricks =
 > update commit time (and rename) during rebase
