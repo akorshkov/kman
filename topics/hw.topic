@@ -1,0 +1,8 @@
+-- common hardware-specific linux commands
+
+====================================================
+= lspci =                  |= modules =
+-v <- more info            |lsmod modprobe rmmod
+-k <- report kernel module |modinfo <mod> <- gives params
+                           |/etc/modprobe.f/<mod> <- conf
+                           |/etc/conf.d/modules <- ?

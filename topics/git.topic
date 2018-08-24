@@ -9,18 +9,18 @@
 	editor = vim
 	pager =
 =====================================================================================================================================================
-= Common operation =                                                      |= reflog =
-> amend options                                                           |git reflog show -n10
+= Common operation =                                                      |> checkout older version
+> amend options                                                           |git checkout {revision} -- path/to/file
 git commit --amend --no-edit --date=now                                   |
 
-= Rebase tricks =
-> update commit time (and rename) during rebase
-git rebase -i HEAD~5 --exec "git commit --amend --date=now --no-edit"
+= Rebase tricks =                                                         |= Vim tricks =
+> update commit time (and rename) during rebase                           |> View older version of file:
+git rebase -i HEAD~5 --exec "git commit --amend --date=now --no-edit"     |:Gedit / :Gsplit / :Gvsplit {revision}:{filename}
 > produces todo-list like
-pick 8d7c8b7 old_descr
-exec git commit --amend --date=now --no-edit <- or -m"new descr"
-...
-
-= log =
-git log -G'pattern' -- path/to/file <- commits that contain 'pattern'
-git log -S'pattern' -- path/to/file <- .. changed number of occurencies
+pick 8d7c8b7 old_descr                                                    |==========================================================================
+exec git commit --amend --date=now --no-edit <- or -m"new descr"          |= reflog =                       |= stash =
+...                                                                       |git reflog show -n10             |git stash [save "descr"]
+                                                                                                            |git stash list
+= log =                                                                                                     |git stash pop
+git log -G'pattern' -- path/to/file <- commits that contain 'pattern'                                       |git stash drop stash@{0}
+git log -S'pattern' -- path/to/file <- .. changed number of occurencies                                     |git stash show -p | git apply
