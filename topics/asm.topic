@@ -3,23 +3,23 @@
 ===================================================================================================
 = registers =                                          |= sections =
 rax       eax  ax                                      |.text
-               ah al                                   |.bss
-0000 0000 0000 00-00                                   |
+               ah al                                   |.bss      <- uninitialized (implicitly 0)
+0000 0000 0000 00-00                                   |.data     <- explicitly initialized r/w
                                                        |
 rax       eax  ax al                                   |
 rbx                                                    |
-rcx                                                    |
-rdx                                                    |
+rcx                       arg4                         |
+rdx                       arg3                         |
                                                        |
-rsi       esi  si sil                                  |
-rdi                                                    |
-                                                       |
-rbp                       <- Stack Base Pointer        |
+rsi       esi  si sil     arg2                         |===========================================
+rdi                       arg1                         |= reporting =
+                                                       |readelf -S         <- report sections
+rbp                       <- Stack Base Pointer        |readelf -l         <- report segments
 rsp                       <- Stack Pointer             |
-                                                       |
-r8        r8d  r8w r8b                                 |
-r9
-r10
+                                                       |objdump -t  -f     <- list of symbols
+r8        r8d  r8w r8b    arg5                         |
+r9                        arg6                         |
+r10                                                    |objdump -D -M intel    <- disassemble
 r11
 r12
 r13
@@ -28,3 +28,4 @@ r15
 
 rip   <- Instruction Pointer Register (next one)
 rFlags
+===================================================================================================
