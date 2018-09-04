@@ -1,0 +1,7 @@
+-- python topic
+=====================================================================================================================================================
+= logging tree =
+> report logging configuration
+$ pip install logging_tree
+import logging_tree
+logging_tree.printout()

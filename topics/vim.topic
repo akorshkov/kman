@@ -1,0 +1,17 @@
+-- vim topic. My vim cheatsheet.
+--
+=====================================================================================
+= color =
+> list of highlight groups
+:highlight
+
+
+> highlight, but not search
+:match StatusLineTerm /{pattern}/
+
+
+> misc data
+:version
+
+> format json
+:execute '%!python -m json.tool'
