@@ -13,14 +13,17 @@
 > amend options                                                           |git checkout {revision} -- path/to/file
 git commit --amend --no-edit --date=now                                   |
 
-= Rebase tricks =                                                         |= Vim tricks =
-> update commit time (and rename) during rebase                           |> View older version of file:
-git rebase -i HEAD~5 --exec "git commit --amend --date=now --no-edit"     |:Gedit / :Gsplit / :Gvsplit {revision}:{filename}
-> produces todo-list like
-pick 8d7c8b7 old_descr                                                    |==========================================================================
-exec git commit --amend --date=now --no-edit <- or -m"new descr"          |= reflog =                       |= stash =
-...                                                                       |git reflog show -n10             |git stash [save "descr"]
-                                                                                                            |git stash list
-= log =                                                                                                     |git stash pop
-git log -G'pattern' -- path/to/file <- commits that contain 'pattern'                                       |git stash drop stash@{0}
-git log -S'pattern' -- path/to/file <- .. changed number of occurencies                                     |git stash show -p | git apply
+= submodules =                                                            |= Vim tricks =
+git submodule foreach --recursive git diff --name-status                  |> View older version of file:
+                                                                          |:Gedit / :Gsplit / :Gvsplit {revision}:{filename}
+= Rebase tricks =
+> update commit time (and rename) during rebase                           |==========================================================================
+git rebase -i HEAD~5 --exec "git commit --amend --date=now --no-edit"     |= reflog =                       |= stash =
+> produces todo-list like                                                 |git reflog show -n10             |git stash [save "descr"]
+pick 8d7c8b7 old_descr                                                                                      |git stash list
+exec git commit --amend --date=now --no-edit <- or -m"new descr"                                            |git stash pop
+...                                                                                                         |git stash drop stash@{0}
+                                                                                                            |git stash show -p | git apply
+= log =
+git log -G'pattern' -- path/to/file <- commits that contain 'pattern'
+git log -S'pattern' -- path/to/file <- .. changed number of occurencies
