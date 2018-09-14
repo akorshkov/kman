@@ -1,7 +1,7 @@
 -- python topic
 =====================================================================================================================================================
-= logging tree =
-> report logging configuration
-$ pip install logging_tree
-import logging_tree
+= logging tree =                      |= debug =
+> report logging configuration        |> local, terminal
+$ pip install logging_tree            |import pdb
+import logging_tree                   |pdb_set_trace()
 logging_tree.printout()
