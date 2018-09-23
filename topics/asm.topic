@@ -3,29 +3,30 @@
 ===================================================================================================
 = registers =                                          |= sections =
 rax       eax  ax                                      |.text
-               ah al                                   |.bss      <- uninitialized (implicitly 0)
-0000 0000 0000 00-00                                   |.data     <- explicitly initialized r/w
-                                                       |
-rax       eax  ax al                                   |
-rbx                                                    |
+               ah al   S- <- callee-saved              |.bss      <- uninitialized (implicitly 0)
+0000 0000 0000 00-00   |                               |.data     <- explicitly initialized r/w
+                       |                               |
+rax       eax  ax al   |                               |
+rbx                    S                               |
 rcx                       arg4                         |
 rdx                       arg3                         |
                                                        |
 rsi       esi  si sil     arg2                         |===========================================
 rdi                       arg1                         |= reporting =
                                                        |readelf -S         <- report sections
-rbp                       <- Stack Base Pointer        |readelf -l         <- report segments
-rsp                       <- Stack Pointer             |
+rbp                    S  <- Stack Base Pointer        |readelf -l         <- report segments
+rsp                    S  <- Stack Pointer             |
                                                        |objdump -t  -f     <- list of symbols
 r8        r8d  r8w r8b    arg5                         |
 r9                        arg6                         |
 r10                                                    |objdump -D -M intel    <- disassemble
 r11
-r12
-r13
-r14
-r15
+r12                    S
+r13                    S
+r14                    S
+r15                    S
 
 rip   <- Instruction Pointer Register (next one)
 rFlags
+xmm0 - xmm7               <- float args and retvals
 ===================================================================================================

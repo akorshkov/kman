@@ -1,6 +1,9 @@
 -- common hardware-specific linux commands
 
 ====================================================
+= proc info =
+cat /proc/<pid>/maps  <- process memory map
+====================================================
 = lspci =                  |= modules =
 -v <- more info            |lsmod modprobe rmmod
 -k <- report kernel module |modinfo <mod> <- gives params
