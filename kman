@@ -28,6 +28,8 @@ _COLORS = {
     'CLREND' : "\033[0m",
 }
 
+# types of output stream items
+_START_COLOR, _OUT_TEXT, _END_COLOR = range(3)
 
 class _TopicFormatter():
     # Colorize strings.
@@ -40,7 +42,91 @@ class _TopicFormatter():
         'note':    _COLORS['GREEN'],
         'comment': _COLORS['BLUE'],
         'keyword': _COLORS['CYAN'],
+        'search':  "\033[1;41;37m",  # inverted red text
     }
+
+    # title example: = some text =
+    # (start or lookbehind '|')=some text=(lookahead spaces + end or '|')
+    _TOKEN_TITLE = ('title', r"(^|(?<=\|))=[^|=]+=(?=\s*($|\|))")
+    # table: long srings of "====" or '|'
+    _TOKEN_TABLE = ('table', r"={3,}|\|")
+    # note example: > note text
+    # (start or lookbehind '|')> the text(lookahead spaces + end or '|')
+    _TOKEN_NOTE = ('note', r"(^|(?<=\|))>[^|]*")
+    # comment example: .... <- comment here
+    _TOKEN_COMMENT = ('comment', r" <- [^|]*")
+
+    class _StringProcessor:
+        # Helper for the procedure that produces colored output.
+        #
+        # Parses the string using given tokenizer and provides information
+        # about the desired color of the current region.
+
+        def __init__(self, tokenizer):
+            # Argument:
+            # - tokenizer: object that splits given string to "syntax items"
+            #
+            # State of the object tells: "I think that the color of original
+            # string's region ending on self.cur_end_pos should be the
+            # color on top of the self.colors_stack"
+            self.cur_end_pos = 0
+            self.colors_stack = []
+            self.tokenizer = tokenizer
+            self.finished = False
+
+        def go_next(self):
+            """Update the self with the information about next syntax region."""
+            try:
+                item_type, item_pos, body = next(self.tokenizer)
+            except StopIteration:
+                self.finished = True
+                return
+
+            if item_type == _START_COLOR:
+                self.colors_stack.append(body)
+            elif item_type == _OUT_TEXT:
+                self.cur_end_pos += body  # body is the lenght of text
+            else:
+                assert item_type == _END_COLOR
+                self.colors_stack.pop()
+
+        @staticmethod
+        def select_processor(processors):
+            """Selects not-finished processor with smallest cur_end_pos."""
+            chosen_processor = None
+            for p in processors:
+                if chosen_processor is None:
+                    if not p.finished:
+                        chosen_processor = p
+                elif p.cur_end_pos < chosen_processor.cur_end_pos:
+                    assert not p.finished
+                    chosen_processor = p
+
+            return chosen_processor
+
+        @staticmethod
+        def get_cur_color(processors):
+            """sorted by priority processrs -> real color of output text.
+
+            Different processors might have different opinions on what color
+            should be used now!
+            """
+            for processor in processors:
+                if processor.colors_stack:
+                    return processor.colors_stack[-1]
+            return _COLORS['CLREND']
+
+    class _DummyTokenizer:
+        # mimics compiled re pattern, but never founds anything
+        @classmethod
+        def finditer(cls, _string):
+
+            return cls._dummy_generator()
+
+        @staticmethod
+        def _dummy_generator():
+            return
+            yield
 
     def __init__(self, _topic_header_lines):
         """Constructor of _TopicFormatter.
@@ -51,65 +137,127 @@ class _TopicFormatter():
             not implemented yet.
         """
         keywords = ['git', 'ps', 'apt', 'yum']  # so far hardcoded
-        patterns = [
-            # title example: = some text =
-            # (start or lookbehind '|')some text(lookahead spaces + end or '|')
-            r"(?P<title>(^|(?<=\|))=[^|=]+=(?=\s*($|\|)))",
-            # table: long srings of "====" or '|'
-            r"(?P<table>={3,}|\|)",
-            # note example: > note text
-            # (start or lookbehind '|')> the text(lookahead spaces + end or '|')
-            r"(?P<note>(^|(?<=\|))>[^|]*)",
-            # comment example: .... <- comment here
-            r"(?P<comment> <- [^|]*)",
+        search_patterns = []
+        top_tokens = [
+            self._TOKEN_TITLE,
+            self._TOKEN_TABLE,
+            self._TOKEN_NOTE,
+            self._TOKEN_COMMENT,
         ]
         if keywords:
-            patterns.append(
-                r"(?P<keyword>"
-                + "|".join(
+            token_keyword = (
+                'keyword',
+                "|".join(
                     # (start or lookbehind space or '|')text(-optional-suffix)(end or lookahead space)
                     r"(^|(?<=\s)|(?<=\|)){}(-[-a-zA-Z]*)?($|(?=\s))".format(kw)
                     for kw in keywords)
-                + ")")
+            )
+            top_tokens.append(token_keyword)
+            self._kw_tokenizer = self._make_tokenizer([token_keyword, ])
+        else:
+            token_keyword = None
+            self._kw_tokenizer = self._DummyTokenizer()
 
-        self._tokenizer = re.compile("|".join(p for p in patterns))
+        if search_patterns:
+            token_search = (
+                'search',
+                "|".join(s_pattern for s_pattern in search_patterns)
+            )
+            self._search_tokenizer = self._make_tokenizer([token_search, ])
+        else:
+            self._search_tokenizer = self._DummyTokenizer()
+
+        self._tokenizer = self._make_tokenizer(top_tokens)
 
     def format_topic_line(self, topic_line):
         """Returns colorized string"""
         return "".join(part for part in self._generate_string_parts(topic_line))
 
     def _generate_string_parts(self, topic_line):
-        # parse 'topic_line' string and generate colored parts
+        """Generates text chunks and color sequences ready for output"""
+        line_len = len(topic_line)
+        cur_pos = 0
+        cur_out_color = _COLORS['CLREND']
+
+        processors = [
+            self._StringProcessor(self._string_to_syntax_items(0, topic_line, self._search_tokenizer)),
+            self._StringProcessor(self._string_to_syntax_items(0, topic_line, self._tokenizer)),
+        ]
+
+        while cur_pos < line_len:
+            processor = self._StringProcessor.select_processor(processors)
+
+            if cur_pos < processor.cur_end_pos:
+                next_color = self._StringProcessor.get_cur_color(processors)
+                if cur_out_color != next_color:
+                    if cur_out_color != _COLORS['CLREND']:
+                        # to fully reset boldness/brightness it's necessary to terminal
+                        yield _COLORS['CLREND']
+                    cur_out_color = next_color
+                    yield cur_out_color
+                yield topic_line[cur_pos:processor.cur_end_pos]
+                cur_pos = processor.cur_end_pos
+            else:
+                processor.go_next()
+
+        yield _COLORS['CLREND']
+
+    def _string_to_syntax_items(self, orig_start_pos, string, tokenizer):
+        # generates "syntax items" from string.
+        #
+        # Possible syntax items:
+        # (_START_COLOR, None,      color_sequence)
+        # (_OYT_TEXT,    start_pos, lenght)
+        # (_END_COLOR,   None,      None)
+        #
+        # Arguments:
+        # - orig_start_pos: prosition of the string to parse in the original
+        #                   string. Not zero if nested syntax rules are used.
+        # - string: the string to parse
+        # - tokenizer: compiled re pattern
         pos = 0
-        for match in self._tokenizer.finditer(topic_line):
+        for match in tokenizer.finditer(string):
             m_start, m_end = match.span()
             if pos < m_start:
-                yield topic_line[pos:m_start]
+                yield (_OUT_TEXT, orig_start_pos+pos, m_start-pos)
 
-            for part in self._generate_token_parts(match):
+            for part in self._syntax_region_to_syntax_items(orig_start_pos+m_start, match):
                 yield part
 
             pos = m_end
 
-        if pos == 0:
-            yield topic_line
-        elif pos < len(topic_line):
-            yield topic_line[pos:]
+        if pos < len(string):
+            yield (_OUT_TEXT, orig_start_pos+pos, len(string)-pos)
 
-    def _generate_token_parts(self, match):
-        # generate parts of string corresponding to s single token
+    def _syntax_region_to_syntax_items(self, orig_start_pos, match):
+        # match -> syntax items
+        #
+        # match means that some syntax region is found in string. Note
+        # that different parts of match may require different coloring.
         m_start, m_end = match.span()
         if match.lastgroup == 'title':
-            # special case: '=' characters of the title are not colorized
-            yield "="
-            yield self._TOKEN_COLORS[match.lastgroup]
-            yield match.string[m_start+1:m_end-1]
-            yield _COLORS["CLREND"]
-            yield "="
+            yield (_OUT_TEXT, orig_start_pos+m_start, 1)  # starting '='
+            yield (_START_COLOR, None, self._TOKEN_COLORS['title'])
+            yield (_OUT_TEXT, orig_start_pos+m_start+1, m_end-m_start-2)  # the text
+            yield (_END_COLOR, None, None)
+            yield (_OUT_TEXT, orig_start_pos+m_end-1, 1)  # trailing '='
+        elif match.lastgroup == 'comment':
+            yield (_START_COLOR, None, self._TOKEN_COLORS['comment'])
+            nested_parts = self._string_to_syntax_items(
+                orig_start_pos+m_start, match.string[m_start:m_end], self._kw_tokenizer)
+            for part in nested_parts:
+                yield part
+            yield (_END_COLOR, None, None)
         else:
-            yield self._TOKEN_COLORS[match.lastgroup]
-            yield match.string[m_start:m_end]
-            yield _COLORS["CLREND"]
+            yield (_START_COLOR, None, self._TOKEN_COLORS[match.lastgroup])
+            yield (_OUT_TEXT, orig_start_pos+m_start, m_end-m_start)
+            yield (_END_COLOR, None, None)
+
+    @staticmethod
+    def _make_tokenizer(tokens):
+        # [(region_name, re_pattern), ] -> compiled re pattern
+        return re.compile(
+            "|".join("(?P<{}>{})".format(name, pattern) for name, pattern in tokens))
 
 
 def do_print_topic(topic_name):
