@@ -56,6 +56,10 @@ class _TopicFormatter():
     # comment example: .... <- comment here
     _TOKEN_COMMENT = ('comment', r" <- [^|]*")
 
+    # command-line token
+    # (start or lookbehind '|')$ the command (lookahead spaces + end or '|')
+    _TOKEN_CMDLINE = ('cmd_line', r"(^|(?<=\|))(\$|#) [^|]*(?=\s*($|\|))")
+
     class _StringProcessor:
         # Helper for the procedure that produces colored output.
         #
@@ -143,7 +147,12 @@ class _TopicFormatter():
             self._TOKEN_TABLE,
             self._TOKEN_NOTE,
             self._TOKEN_COMMENT,
+            self._TOKEN_CMDLINE,
         ]
+        cmd_line_tokens = [  # nested syntax rules for command-line
+            self._TOKEN_COMMENT,
+        ]
+
         if keywords:
             token_keyword = (
                 'keyword',
@@ -153,6 +162,7 @@ class _TopicFormatter():
                     for kw in keywords)
             )
             top_tokens.append(token_keyword)
+            cmd_line_tokens.append(token_keyword)
             self._kw_tokenizer = self._make_tokenizer([token_keyword, ])
         else:
             token_keyword = None
@@ -168,6 +178,8 @@ class _TopicFormatter():
             self._search_tokenizer = self._DummyTokenizer()
 
         self._tokenizer = self._make_tokenizer(top_tokens)
+        self._cmd_line_tokenizer = self._make_tokenizer(cmd_line_tokens)
+
 
     def format_topic_line(self, topic_line):
         """Returns colorized string"""
@@ -245,6 +257,17 @@ class _TopicFormatter():
             yield (_START_COLOR, None, self._TOKEN_COLORS['comment'])
             nested_parts = self._string_to_syntax_items(
                 orig_start_pos+m_start, match.string[m_start:m_end], self._kw_tokenizer)
+            for part in nested_parts:
+                yield part
+            yield (_END_COLOR, None, None)
+        elif match.lastgroup == 'cmd_line':
+            yield (_START_COLOR, None,
+                   _COLORS['D_GREEN'] if match.string[m_start] == '$' else _COLORS['RED'])
+            yield (_OUT_TEXT, orig_start_pos+m_start, 2) # prompt + space
+            yield (_END_COLOR, None, None)
+            yield (_START_COLOR, None, _COLORS['WHITE'])
+            nested_parts = self._string_to_syntax_items(
+                orig_start_pos+m_start+2, match.string[m_start+2:m_end], self._cmd_line_tokenizer)
             for part in nested_parts:
                 yield part
             yield (_END_COLOR, None, None)
