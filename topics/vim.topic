@@ -15,3 +15,7 @@
 
 > format json
 :execute '%!python -m json.tool'
+=====================================================================================
+= vimscript =
+:echom "some message"
+:messages              <- view messages

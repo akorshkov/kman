@@ -1,7 +1,17 @@
 -- python topic
 =====================================================================================================================================================
-= logging tree =                      |= debug =
-> report logging configuration        |> local, terminal
-$ pip install logging_tree            |import pdb
-import logging_tree                   |pdb_set_trace()
+= logging tree =                      |= debug =                  |= virtualenv =
+> report logging configuration        |> local, terminal          |$ virtualenv -p python3 env
+$ pip install logging_tree            |import pdb                 |$ . env/bin/activate
+import logging_tree                   |pdb_set_trace()            |$ pip install ...
 logging_tree.printout()
+--------------------------------------
+= logging =
+logging.basicConfig(level=logging.DEBUG)
+> methods
+10 logger.debug
+20 logger.info
+30 logger.warning
+40 logger.error
+50 logger.critical
+logger.exception <- only in exc handlers

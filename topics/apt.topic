@@ -6,23 +6,24 @@ apt-cache - display information about package
 apt - is meant to be pleasant for end-users and doesn't need to be backward compatible like apt-get
 ==========================================================================================
 = general =
-sudo apt update                       <- update list of available packages  (aka eix-sync)
-sudo apt upgrade                      <- do upgrade
-sudo apt-get autoremove               <- remove outdated packages
-sudo do-release-upgrade               <- upgrade major version
-apt list --installed
-apt list --upgradable
+$ sudo apt update                       <- update list of available packages  (aka eix-sync)
+$ sudo apt upgrade                      <- do upgrade
+$ sudo apt-get autoremove               <- remove outdated packages
+$ sudo do-release-upgrade               <- upgrade major version
+$ apt list --installed
+$ dpkg -l                               <- more low-level
+$ apt list --upgradable
 
 = per-package commands =
-apt search sqlitebrowser
-apt-cache show package     <- print descr and misc info about package
-sudo apt install sqlitebrowser
-sudo apt remove vim-tiny
+$ apt search sqlitebrowser
+$ apt-cache show package     <- print descr and misc info about package
+$ sudo apt install sqlitebrowser
+$ sudo apt remove vim-tiny
 
 ==========================================================================================
 = apt-file =
  <- search package which provides file (the file/package may be not yet installed) ->
-sudo apt install apt-file             <- install/prepare the package
-sudo apt-file update
+$ sudo apt install apt-file             <- install/prepare the package
+$ sudo apt-file update
 
-apt-file search <pattern>             <- search packages having file
+$ apt-file search <pattern>             <- search packages having file

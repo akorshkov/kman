@@ -3,17 +3,17 @@
 = color ansi sequences =                                               |= color in .sh=
            Colors         "\033[....m"  <- common format               |red=$'\033[1;31m'
 BLACK    : "\033[1;30m"         ....    <- ;-delimited list of ints    |PS1+='${red}some red${end}
-RED      : "\033[1;31m"      0      <- clear all formatting            |=====================================
-GREEN    : "\033[1;32m"      1,22,2 <- bold, normal, faint
-YELLOW   : "\033[1;33m"      4,24   <- underline, off
-BLUE     : "\033[1;34m"      5      <- blink
-MAGENTA  : "\033[1;35m"      9      <- crossed
-CYAN     : "\033[1;36m"      30-37  <- fg color (rgb)
-WHITE    : "\033[1;37m"      40-47  <- bg color (rgb)
-                             38,48  <- more fg/bg colors
-CLREND   : "\033[0m"
-
+RED      : "\033[1;31m"      0      <- clear all formatting|=================================================
+GREEN    : "\033[1;32m"      1,22,2 <- bold, normal, faint | ${name}  <- $name
+YELLOW   : "\033[1;33m"      4,24   <- underline, off      | ${name:-dflt_val}
+BLUE     : "\033[1;34m"      5      <- blink               | ${name:?msg_to_die_with}
+MAGENTA  : "\033[1;35m"      9      <- crossed             | ${name:+word} <- return word if name exists
+CYAN     : "\033[1;36m"      30-37  <- fg color (rgb)      | ${name:=word} <- set $name to word if undefined
+WHITE    : "\033[1;37m"      40-47  <- bg color (rgb)      | $(  ) ==  `   `  <- command substitution
+                             38,48  <- more fg/bg colors   | [  ]   <- condition
+CLREND   : "\033[0m"                                       | [[ ]]  <- adv. conditions
+                                                           | (( ))  <- num. conditions
 =============================================================================================================
 = bashrc =
-# do not save into history commands starting with ' ' and duplicates:
+> do not save into history commands starting with ' ' and duplicates:
 export HISTCONTROL=ignoreboth
