@@ -60,6 +60,9 @@ class _TopicFormatter():
     # (start or lookbehind '|')$ the command (lookahead spaces + end or '|')
     _TOKEN_CMDLINE = ('cmd_line', r"(^|(?<=\|))(\$|#) [^|]*(?=\s*($|\|))")
 
+    # header markers
+    _HEADER_KEYWORDS = "-- keywords:"
+
     class _StringProcessor:
         # Helper for the procedure that produces colored output.
         #
@@ -140,7 +143,12 @@ class _TopicFormatter():
             configuration directives. Processing of these directives is
             not implemented yet.
         """
-        keywords = ['git', 'ps', 'apt', 'yum']  # so far hardcoded
+        keywords = []
+        for line in _topic_header_lines:
+            if line.startswith(self._HEADER_KEYWORDS):
+                body = line[len(self._HEADER_KEYWORDS):]
+                keywords.extend(body.split())
+
         search_patterns = []
         top_tokens = [
             self._TOKEN_TITLE,
