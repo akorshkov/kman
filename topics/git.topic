@@ -7,26 +7,29 @@
 [log]
 	date = format:%Y-%m-%d %H:%M:%S
 [core]
+	excludesfile = ~/.gitignore_global  <- if can't touch .gitignore
 	editor = vim
 	pager =
 =====================================================================================================================================================
-= Common operation =                                                      |> checkout older version
-> amend options                                                           |$ git checkout {revision} -- path/to/file
+= Common operation =                                                      |> checkout older version or forom different branch
+> amend options                                                           |$ git checkout {revision} -- path/to/file  <- no revision = staging area
 $ git commit --amend --no-edit --date=now                                 |
-> fetch and merge other branch                                            |
-$ git fetch origin master:master  <- {remote_name}:{local_name}           |
-                                                                          |
-= submodules =                                                            |= Vim tricks =
-$ git submodule update                                                    |> View older version of file:
-$ git submodule foreach --recursive git diff --name-status                |:Gedit / :Gsplit / :Gvsplit {revision}:{filename}
-                                                                          |
-= Rebase tricks =                                                         |==========================================================================
-> update commit time (and rename) during rebase                           |= reflog =                       |= stash =
-$ git rebase -i HEAD~5 --exec "git commit --amend --date=now --no-edit"   |$ git reflog show -n10           |$ git stash [save "descr"]
-> produces todo-list like                                                 |                                 |$ git stash list
-pick 8d7c8b7 old_descr                                                    |                                 |$ git stash pop
-$ exec git commit --amend --date=now --no-edit <- or -m"new descr"        |                                 |$ git stash drop stash@{0}
-...                                                                       |                                 |$ git stash show -p | git apply
+> fetch and merge other branch                                            |> show file from different branch
+$ git fetch origin master:master  <- {remote_name}:{local_name}           |$ git show branch:file
+> cleanup obsolete branches                                               |
+$ git fetch origin --prune                                                |= Vim tricks =
+                                                                          |> View older version of file:
+= submodules =                                                            |:Gedit / :Gsplit / :Gvsplit {revision}:{filename}
+$ git submodule update                                                    |
+$ git submodule foreach --recursive git diff --name-status                |==========================================================================
+                                                                          |= reflog =                       |= stash =
+= Rebase tricks =                                                         |$ git reflog show -n10           |$ git stash [save "descr"]
+> update commit time (and rename) during rebase                           |                                 |$ git stash list
+$ git rebase -i HEAD~5 --exec "git commit --amend --date=now --no-edit"   |                                 |$ git stash pop
+> produces todo-list like                                                 |                                 |$ git stash drop stash@{0}
+pick 8d7c8b7 old_descr                                                    |                                 |$ git stash show -p | git apply
+$ exec git commit --amend --date=now --no-edit <- or -m"new descr"
+...
 
 = log =
 $ git log -G'pattern' -- path/to/file <- commits that contain 'pattern'

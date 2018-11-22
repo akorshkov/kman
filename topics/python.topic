@@ -3,7 +3,7 @@
 = logging tree =                      |= debug =                  |= virtualenv =
 > report logging configuration        |> local, terminal          |$ virtualenv -p python3 env
 $ pip install logging_tree            |import pdb                 |$ . env/bin/activate
-import logging_tree                   |pdb_set_trace()            |$ pip install ...
+import logging_tree                   |pdb.set_trace()            |$ pip install ...
 logging_tree.printout()
 --------------------------------------
 = logging =
