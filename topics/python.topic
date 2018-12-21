@@ -1,13 +1,13 @@
 -- python topic
 =====================================================================================================================================================
-= logging tree =                      |= debug =                  |= virtualenv =
-> report logging configuration        |> local, terminal          |$ virtualenv -p python3 env
-$ pip install logging_tree            |import pdb                 |$ . env/bin/activate
-import logging_tree                   |pdb.set_trace()            |$ pip install ...
-logging_tree.printout()
---------------------------------------
-= logging =
-logging.basicConfig(level=logging.DEBUG)
+= logging tree =                      |= debug =                  |= virtualenv =                   |= datetime =
+> report logging configuration        |> local, terminal          |$ virtualenv -p python3 env      | datetime.utcnow()  <- naive
+$ pip install logging_tree            |import pdb                 |$ . env/bin/activate             | datetime.now()     <- naive, produce good
+import logging_tree                   |pdb.set_trace()            |$ pip install ...                |                    <- timestamp
+logging_tree.printout()                                                                             | datetime.now(tz)   <- tz-aware
+--------------------------------------------------------------------------------------------------- | dt.astimezone()  <- good tz-aware, local tz
+= logging =                                    |= formatting =                                      |                  <- works with naive in 3.6+
+logging.basicConfig(level=logging.DEBUG)       |"{: 6.2f}"     <- '  7.00'
 > methods
 10 logger.debug
 20 logger.info
