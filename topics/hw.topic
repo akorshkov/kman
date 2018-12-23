@@ -8,5 +8,6 @@ $ cat /proc/<pid>/maps  <- process memory map
 = lspci =                  |= modules =
 -v <- more info            |$ lsmod modprobe rmmod
 -k <- report kernel module |$ modinfo <mod> <- gives params
-                           |/etc/modprobe.f/<mod> <- conf
+-nn <- [vend_id:hw_id]     |/etc/modprobe.f/<mod> <- conf
                            |/etc/conf.d/modules <- ?
+https://pci-ids.ucw.cz <- [vend_id:hw_id] to info about hardware

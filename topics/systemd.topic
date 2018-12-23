@@ -1,11 +1,10 @@
 -- systemd
 
-
 ==========================================================================================
 = units =                                       |= targets =
-unit files locations: '/usr/lib/systemd/system' |- target - approximately the same as runlevel
-                      '/etc/systemd/system'     |- target IS also a unit
-                                                |- so list-unit-files reports targets as well
+> unit files locations (man 5 systemd.unit):    |- target - approximately the same as runlevel
+/etc/systemd/system  <- looks like main location|- target IS also a unit
+/usr/lib/systemd/system <- or /lib/systemd/..   |- so list-unit-files reports targets as well
                                                 |
 systemctl                 <- running units      |systemctl get-default          <- name of current target
 systemctl list-units      <- ..same             |systemctl set-default <target> <- set boot target

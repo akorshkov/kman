@@ -14,10 +14,10 @@ WHITE    : "\033[1;37m"      40-47  <- bg color (rgb)      | $(  ) ==  `   `  <-
 CLREND   : "\033[0m"                                       | [[ ]]  <- adv. conditions
                                                            | (( ))  <- num. conditions
 =============================================================================================================
-= for loop =                             |
-for i in {1..10}; do some command; done  |
-for i in {1..10}                         |
-do                                       |
+= for loop =                             |= debug =
+for i in {1..10}; do some command; done  |set -x
+for i in {1..10}                         |..code..
+do                                       |set +x
   some command                           |
 done                                     |
 
