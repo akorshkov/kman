@@ -1,5 +1,5 @@
 -- common hardware-specific linux commands
--- keywords: cat lsmod modinfo
+-- keywords: cat lsmod modinfo tcpdump
 
 ====================================================
 = proc info =
@@ -11,3 +11,8 @@ $ cat /proc/<pid>/maps  <- process memory map
 -nn <- [vend_id:hw_id]     |/etc/modprobe.f/<mod> <- conf
                            |/etc/conf.d/modules <- ?
 https://pci-ids.ucw.cz <- [vend_id:hw_id] to info about hardware
+====================================================
+= tcpdump =
+$ tcpdump -i eth0 'port 30443' -X
+  -i <interface> or 'any'
+  -X decode data to ascii strings

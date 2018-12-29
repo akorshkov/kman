@@ -15,3 +15,6 @@ $ pip install -e <path>   <- dev mode: installed, editable on orig location
 
 $ pip install path/to/SomeProject-1.4.2.tar.gz
 $ pip install path/to/SomeProject-....hwl
+
+= setuptools =
+$ python setup.py sdist  <- creates distribution tar.gz.
