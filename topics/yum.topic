@@ -5,6 +5,14 @@
 = general =
 $ sudo yum update       <- update everything
 $ sudo yum upgrade      <- same, but forces removal of obsolete packages
+$ yum list [all|installed|available] "ma?s*"
+$ sudo yum reinstall package
+
+$ sudo yum grouplist
+$ sudo yum groupupdate "MATE Desktop"
+$ sudo yum groupinstall "MATE Desktop"
+$ sudo yum groupremove "MATE Desktop"
+
 
 ==========================================================================================
 = search commands =

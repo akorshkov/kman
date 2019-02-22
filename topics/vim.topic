@@ -19,3 +19,9 @@
 = vimscript =
 :echom "some message"
 :messages              <- view messages
+=====================================================================================
+= edit hex =
+:%!xxd    <- convert the file to hex format
+... do edit ...
+:%!xxd -r   < convert the hex back to binary
+xxd is actually a unix command

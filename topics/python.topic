@@ -8,10 +8,18 @@ logging_tree.printout()                                                         
 --------------------------------------------------------------------------------------------------- | dt.astimezone()  <- good tz-aware, local tz
 = logging =                                    |= formatting =                                      |                  <- works with naive in 3.6+
 logging.basicConfig(level=logging.DEBUG)       |"{: 6.2f}"   7.   <- '  7.00'
-> methods                                      |"{: 6"      21    <- '    21'
-10 logger.debug                                |"{:06"      21    <- '000021'
-20 logger.info
-30 logger.warning
-40 logger.error
-50 logger.critical
+> methods                                      |"{: 6}"     21    <- '    21'
+10 logger.debug                                |"{:06}"     21    <- '000021'
+20 logger.info                                 |
+30 logger.warning                              |"{:6}"      "xyz" <- 'xyz   '
+40 logger.error                                |"{:^6"      "xyz" <- ' xyz  '
+50 logger.critical                             |"{:_>6"     "xyz" <- '___xyz'
 logger.exception <- only in exc handlers
+------------------------------------------------------------------------------
+= argparse with subcommands =
+parser = argparse.ArgumentParser(description="App descr")
+subparsers = parser.addsubparser(desc='command', help="Available commands")
+sub_p_01 = subparsers.add_parser("a", help="descr of cmd 01")
+...
+sub_p_02 = subparsers.add_parser("b", help="descr of cmd 02")
+sub_p_02.add_argument("arg_name", help="specific for cmd 02")
