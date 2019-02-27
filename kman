@@ -32,6 +32,7 @@ _COLORS = {
 # types of output stream items
 _START_COLOR, _OUT_TEXT, _END_COLOR = range(3)
 
+
 class _TopicFormatter:
     # Colorize strings.
     #
@@ -60,9 +61,6 @@ class _TopicFormatter:
     # command-line token
     # (start or lookbehind '|')$ the command (lookahead spaces + end or '|')
     _TOKEN_CMDLINE = ('cmd_line', r"(^|(?<=\|))(\$|#) [^|]*(?=\s*($|\|))")
-
-    # header markers
-    _HEADER_KEYWORDS = "-- keywords:"
 
     class _StringProcessor:
         # Helper for the procedure that produces colored output.
@@ -136,21 +134,14 @@ class _TopicFormatter:
             return
             yield
 
-    def __init__(self, _topic_header_lines, search_pattern):
+    def __init__(self, keywords, search_pattern):
         """Constructor of _TopicFormatter.
 
         Arguments:
-        - _topic_header_lines: list of strings which contain formatter
-            configuration directives. Processing of these directives is
-            not implemented yet.
+        - keywords: collection of keywords
         - search_pattern: re pattern to search in topic
+        Both are used for color formatting.
         """
-        keywords = []
-        for line in _topic_header_lines:
-            if line.startswith(self._HEADER_KEYWORDS):
-                body = line[len(self._HEADER_KEYWORDS):]
-                keywords.extend(body.split())
-
         top_tokens = [
             self._TOKEN_TITLE,
             self._TOKEN_TABLE,
@@ -288,27 +279,93 @@ class _TopicFormatter:
             "|".join("(?P<{}>{})".format(name, pattern) for name, pattern in tokens))
 
 
+class _TopicReader:
+    # helper file-like object, which yields topic file lines.
+    #
+    # Purpose of this class is to detect end of topic meta and yield
+    # a None marker between meta lines and rest of the topic.
+    def __init__(self, filename):
+        self.filename = filename
+        self.fobj = None
+        self.the_generator = None
+
+    def __enter__(self):
+        assert not self.fobj  # entered previously - must be an error
+        self.fobj = open(self.filename)
+        return self
+
+    def __exit__(self, *_):
+        self.fobj.close()
+
+    def __iter__(self):
+        if self.the_generator is None:
+            assert self.fobj, "_TopicReader should be used as context manager"
+            self.the_generator = self._prepare_the_generator(self.fobj)
+        return self.the_generator
+
+    @staticmethod
+    def _prepare_the_generator(file_obj):
+        # yileds the result values (lines from the file and separator)
+
+        reading_header = True
+        for line in file_obj:
+            if reading_header:
+                if line.startswith('--'):
+                    yield line
+                else:
+                    reading_header = False
+                    yield None
+                    yield line
+            else:
+                yield line
+
+
+class _TopicMeta:
+    # topic metadata.
+    #
+    # Topic file contains some metadata in the first several lines starting
+    # with '--'.
+
+    # header markers
+    _HEADER_TITLE    = "-- title:"
+    _HEADER_KEYWORDS = "-- keywords:"
+    _HEADER_DESCR    = "-- descr:"
+
+    def __init__(self, filename, topic_reader):
+        # consume metadata lines from topic_reader, parse them
+        self.filename = filename
+        self.title = None
+        self.keywords = set()
+        self.descr = None
+
+        for header_line in topic_reader:
+            if header_line is None:
+                # finished reading topic meta data
+                break
+
+            if header_line.startswith(self._HEADER_TITLE):
+                self.title = header_line[len(self._HEADER_TITLE):].strip()
+            elif header_line.startswith(self._HEADER_KEYWORDS):
+                keywords_text = header_line[len(self._HEADER_KEYWORDS):]
+                self.keywords.update(keywords_text.split())
+            elif header_line.startswith(self._HEADER_DESCR):
+                self.descr = header_line[len(self._HEADER_DESCR):].strip()
+
+
 def do_print_topic(topic_file_path, search_words, search_texts):
-    """Find ad print topic."""
+    """print the topic."""
 
     search_pattern = _make_search_pattern(search_words, search_texts)
 
     formatter = None
     reading_topic_meta = True
     topic_header_lines = []
-    for line in open(topic_file_path):
-        line = line.rstrip()
-        if reading_topic_meta:
-            # still reading the "header" part of the topic
-            # which contains some meta information
-            if line.startswith('--'):
-                topic_header_lines.append(line)
-                continue
-            else:
-                formatter = _TopicFormatter(topic_header_lines, search_pattern)
-                reading_topic_meta = False
+    with _TopicReader(topic_file_path) as f:
+        topic_meta = _TopicMeta(topic_file_path, f)
+        formatter = _TopicFormatter(topic_meta.keywords, search_pattern)
 
-        print(formatter.format_topic_line(line))
+        for line in f:
+            print(formatter.format_topic_line(line.rstrip()))
 
 
 def _make_search_pattern(whole_words, text_parts):
