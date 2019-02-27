@@ -448,6 +448,13 @@ def search_topics_by_pattern(topics_dirs, whole_words, text_parts):
     return matching_topics_metas
 
 
+def get_all_topic_metas(topics_dirs):
+    """yields metas of all available topics."""
+    for topic_file in find_all_topic_files(topics_dirs):
+        with _TopicReader(topic_file) as f:
+            yield _TopicMeta(topic_file, f)
+
+
 def find_all_topic_files(topics_dirs):
     """Iterate through all the available topics"""
     for dir_name in topics_dirs:
@@ -503,7 +510,13 @@ def main():
                 do_print_topic(matching_topics[0].filename, args.search_word, args.search)
                 return
         else:
-            assert False, "Not implemented."
+            # print list of all the topics
+            num_topics = 0
+            for topic_meta in get_all_topic_metas(topics_dirs):
+                print(topic_meta.make_colored_descr())
+                num_topics += 1
+            print("---\n Total: {} tipic(s) found".format(num_topics))
+            return
     else:
         topic_file_path = find_topic_by_name(topics_dirs, args.topic)
         if not topic_file_path:
