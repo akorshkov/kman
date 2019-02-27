@@ -1,5 +1,5 @@
--- vim topic. My vim cheatsheet.
---
+-- title: vim
+-- descr: my vim cheatsheet
 =====================================================================================
 = color =
 > list of highlight groups

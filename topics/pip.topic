@@ -1,4 +1,5 @@
--- pip topic
+-- title: pip
+-- descr: python packaging cheatsheet
 ================================================================================
 = install =
 $ pip install --user ....           <- cur user (~/.local/...)

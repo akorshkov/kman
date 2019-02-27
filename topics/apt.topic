@@ -1,4 +1,5 @@
--- apt - ubuntu package manager
+-- title: apt
+-- descr: ubuntu package manager
 -- keywords: apt
 
 apt - Advanced Packaging Toll

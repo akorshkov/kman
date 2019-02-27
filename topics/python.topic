@@ -1,4 +1,5 @@
--- python topic
+-- title: python
+-- descr: python language cheatsheet
 =====================================================================================================================================================
 = logging tree =                      |= debug =                  |= virtualenv =                   |= datetime =
 > report logging configuration        |> local, terminal          |$ virtualenv -p python3 env      | datetime.utcnow()  <- naive

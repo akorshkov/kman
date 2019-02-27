@@ -1,4 +1,5 @@
-
+-- title: bash
+-- descr: bash language cheatsheet
 =============================================================================================================
 = color ansi sequences =                                               |= color in .sh=
            Colors         "\033[....m"  <- common format               |red=$'\033[1;31m'

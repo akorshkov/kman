@@ -1,4 +1,5 @@
--- kernel rebuild cheatsheet
+-- title: kernel
+-- descr: gentoo kernel rebuild cheatsheet
 --
 = kernel on gentoo =
 > kernel package name:

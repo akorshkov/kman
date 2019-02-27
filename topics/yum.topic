@@ -1,4 +1,5 @@
--- yum - package manager in CentOS
+-- title: yum
+-- descr: package manager in CentOS
 -- keywords: yum
 
 ==========================================================================================

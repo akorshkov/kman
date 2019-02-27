@@ -1,4 +1,5 @@
--- common hardware-specific linux commands
+-- title: hw
+-- descr: common hardware-specific linux commands
 -- keywords: cat lsmod modinfo tcpdump
 
 ====================================================

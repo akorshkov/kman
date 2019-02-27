@@ -1,4 +1,5 @@
--- systemd
+-- title: systemd
+-- descr: systemd-specific linux commands
 
 ==========================================================================================
 = units =                                       |= targets =
