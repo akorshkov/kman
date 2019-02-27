@@ -331,6 +331,19 @@ class _TopicMeta:
     _HEADER_KEYWORDS = "-- keywords:"
     _HEADER_DESCR    = "-- descr:"
 
+    # static structure of the colored description of metadata
+    _COLORED_DESCR_PARTS = [
+        _TopicFormatter._TOKEN_COLORS['keyword'],
+        # title goes here
+        (_COLORS['CLREND'] +
+         _TopicFormatter._TOKEN_COLORS['table'] + '| ' + _COLORS['CLREND'] +
+         _TopicFormatter._TOKEN_COLORS['note']),
+        # description goes here
+        _COLORS['CLREND'] + ' (',
+        # path goes here
+        ')'
+    ]
+
     def __init__(self, filename, topic_reader):
         # consume metadata lines from topic_reader, parse them
         self.filename = filename
@@ -350,6 +363,23 @@ class _TopicMeta:
                 self.keywords.update(keywords_text.split())
             elif header_line.startswith(self._HEADER_DESCR):
                 self.descr = header_line[len(self._HEADER_DESCR):].strip()
+
+    def make_colored_descr(self):
+        """topic meta -> colorized description of the topic."""
+        title = self.title or "unknown"
+        title = "{: <12}".format(title)
+
+        descr = self.descr or "- no description -"
+
+        return "".join(p for p in [
+            self._COLORED_DESCR_PARTS[0],
+            title,
+            self._COLORED_DESCR_PARTS[1],
+            descr,
+            self._COLORED_DESCR_PARTS[2],
+            self.filename,
+            self._COLORED_DESCR_PARTS[3]
+        ])
 
 
 def do_print_topic(topic_file_path, search_words, search_texts):
@@ -396,25 +426,26 @@ def find_topic_by_name(topics_dirs, topic_name):
     return None
 
 def search_topics_by_pattern(topics_dirs, whole_words, text_parts):
-    """Find topics contaning specified words/text."""
+    """Find topics contaning specified words/text.
+
+    Returns list of meta's of the matching topics.
+    """
 
     search_pattern = _make_search_pattern(whole_words, text_parts)
     search_pattern = re.compile(search_pattern)
 
-    matching_topics_files = []
+    matching_topics_metas = []
     for topic_file in find_all_topic_files(topics_dirs):
-        reading_header_lines = True
-        for line in open(topic_file):
-            if reading_header_lines:
-                if line.startswith("--"):
-                    continue
-                else:
-                    reading_header_lines = False
-            if search_pattern.search(line) is not None:
-                matching_topics_files.append(topic_file)
-                break
+        with _TopicReader(topic_file) as f:
+            topic_meta = _TopicMeta(topic_file, f)
 
-    return matching_topics_files
+            # now reading the topic body lines
+            for line in f:
+                if search_pattern.search(line) is not None:
+                    matching_topics_metas.append(topic_meta)
+                    break
+
+    return matching_topics_metas
 
 
 def find_all_topic_files(topics_dirs):
@@ -464,12 +495,13 @@ def main():
             if not matching_topics:
                 print("No topics contain the searth pattern")
                 return
+            print("Search pattern found in the following {} topic(s):".format(len(matching_topics)))
+            for topic_meta in matching_topics:
+                print(topic_meta.make_colored_descr())
             if len(matching_topics) == 1:
-                do_print_topic(matching_topics[0], args.search_word, args.search)
+                print()
+                do_print_topic(matching_topics[0].filename, args.search_word, args.search)
                 return
-            print("Search pattern found in the following topics:\n")
-            for topic_file_path in matching_topics:
-                print(topic_file_path)
         else:
             assert False, "Not implemented."
     else:
