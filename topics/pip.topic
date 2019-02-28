@@ -1,5 +1,7 @@
 -- title: pip
 -- descr: python packaging cheatsheet
+-- items: pip
+-- keywords: pip
 ================================================================================
 = install =
 $ pip install --user ....           <- cur user (~/.local/...)

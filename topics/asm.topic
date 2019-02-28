@@ -1,6 +1,7 @@
 -- title: asm
 -- descr: misc asm and related notes
-
+-- items: readelf objdump
+--
 ===================================================================================================
 = registers =                                          |= sections =
 rax       eax  ax                                      |.text
@@ -14,13 +15,13 @@ rdx                       arg3                         |
                                                        |
 rsi       esi  si sil     arg2                         |===========================================
 rdi                       arg1                         |= reporting =
-                                                       |readelf -S         <- report sections
-rbp                    S  <- Stack Base Pointer        |readelf -l         <- report segments
+                                                       |$ readelf -S         <- report sections
+rbp                    S  <- Stack Base Pointer        |$ readelf -l         <- report segments
 rsp                    S  <- Stack Pointer             |
-                                                       |objdump -t  -f     <- list of symbols
+                                                       |$ objdump -t  -f     <- list of symbols
 r8        r8d  r8w r8b    arg5                         |
 r9                        arg6                         |
-r10                                                    |objdump -D -M intel    <- disassemble
+r10                                                    |$ objdump -D -M intel    <- disassemble
 r11
 r12                    S
 r13                    S

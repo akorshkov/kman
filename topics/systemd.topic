@@ -1,26 +1,27 @@
 -- title: systemd
 -- descr: systemd-specific linux commands
+-- items: systemctl journalctl
 
 ==========================================================================================
-= units =                                       |= targets =
-> unit files locations (man 5 systemd.unit):    |- target - approximately the same as runlevel
-/etc/systemd/system  <- looks like main location|- target IS also a unit
-/usr/lib/systemd/system <- or /lib/systemd/..   |- so list-unit-files reports targets as well
-                                                |
-systemctl                 <- running units      |systemctl get-default          <- name of current target
-systemctl list-units      <- ..same             |systemctl set-default <target> <- set boot target
-systemctl list-unit-files <- list all unit files|systemctl list-units --type=<target>
+= units =                                         |= targets =
+> unit files locations (man 5 systemd.unit):      |- target - approximately the same as runlevel
+/etc/systemd/system  <- looks like main location  |- target IS also a unit
+/usr/lib/systemd/system <- or /lib/systemd/..     |- so list-unit-files reports targets as well
+                                                  |
+$ systemctl                 <- running units      |$ systemctl get-default          <- name of current target
+$ systemctl list-units      <- ..same             |# systemctl set-default <target> <- set boot target
+$ systemctl list-unit-files <- list all unit files|$ systemctl list-units --type=<target>
 ==========================================================================================
 = individual unit commands =
-systemctl status <unit>
-systemctl start <unit>
-systemctl stop <unit>
-systemctl restart <unit>
-systemctl reload <unit>  <- reload configuration
-systemctl enable <unit>  <- start at boot
-systemctl disable <unit> <- start at boot
+$ systemctl status <unit>
+# systemctl start <unit>
+# systemctl stop <unit>
+# systemctl restart <unit>
+# systemctl reload <unit>  <- reload configuration
+# systemctl enable <unit>  <- start at boot
+# systemctl disable <unit> <- start at boot
 ==========================================================================================
 = system log =
-journalctl -f     <- view system log (continuous)
-journalctl -b     <- messages from current boot
-journalctl -b -2  <- messages from second-previous boot
+$ journalctl -f     <- view system log (continuous)
+$ journalctl -b     <- messages from current boot
+$ journalctl -b -2  <- messages from second-previous boot

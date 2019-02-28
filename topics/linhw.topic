@@ -1,7 +1,8 @@
--- title: hw
+-- title: linhw
 -- descr: common hardware-specific linux commands
--- keywords: cat lsmod modinfo tcpdump
-
+-- items: proc lsmod modinfo tcpdump netstat
+-- keywords: lsmod modinfo tcpdump netstat
+--
 ====================================================
 = proc info =
 $ cat /proc/<pid>/maps  <- process memory map
@@ -17,3 +18,7 @@ https://pci-ids.ucw.cz <- [vend_id:hw_id] to info about hardware
 $ tcpdump -i eth0 'port 30443' -X
   -i <interface> or 'any'
   -X decode data to ascii strings
+====================================================
+= netstat =
+$ netstat -ni   <- list network kernel interface table
+$ netstat -nr   <- list routing tables

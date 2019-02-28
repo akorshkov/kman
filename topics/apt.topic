@@ -1,7 +1,8 @@
 -- title: apt
 -- descr: ubuntu package manager
+-- items: apt dpkg
 -- keywords: apt
-
+--
 apt - Advanced Packaging Toll
 apt-get - lower-level command
 apt-cache - display information about package

@@ -1,5 +1,6 @@
 -- title: vim
 -- descr: my vim cheatsheet
+-- items: vim vimscript highlight
 =====================================================================================
 = color =
 > list of highlight groups

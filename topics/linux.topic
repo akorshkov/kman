@@ -1,6 +1,18 @@
 -- title: linux
 -- descr: misc linux admin commands
-
+-- items: dd chmod chown date mount umount unmount
+-- keywords: dd chmod chown date mount umount
+--
 =====================================================
 = dd =                                              |
-sudo dd bs=4M if=/path/to.iso of=/dev/sdb; sync     |
+$ sudo dd bs=4M if=/path/to.iso of=/dev/sdb; sync   |
+=====================================================
+= chmod chown =                                     |
+$ chmod --reference reference/file files/to/mo*ify  |
+=====================================================
+= date =                                            |
+$ date --rfc-3339=ns                                |
+2018-11-27 09:50:26.237316213+03:00                 |
+=====================================================
+= mount umount =                                    |
+$ umount /mounted/dir   <- unmount mounted path     |

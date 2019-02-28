@@ -1,5 +1,7 @@
 -- title: python
 -- descr: python language cheatsheet
+-- items: datetime pdb logger format virtualenv argparse
+-- keywords: pip
 =====================================================================================================================================================
 = logging tree =                      |= debug =                  |= virtualenv =                   |= datetime =
 > report logging configuration        |> local, terminal          |$ virtualenv -p python3 env      | datetime.utcnow()  <- naive
@@ -8,9 +10,9 @@ import logging_tree                   |pdb.set_trace()            |$ pip install
 logging_tree.printout()                                                                             | datetime.now(tz)   <- tz-aware
 --------------------------------------------------------------------------------------------------- | dt.astimezone()  <- good tz-aware, local tz
 = logging =                                    |= formatting =                                      |                  <- works with naive in 3.6+
-logging.basicConfig(level=logging.DEBUG)       |"{: 6.2f}"   7.   <- '  7.00'
-> methods                                      |"{: 6}"     21    <- '    21'
-10 logger.debug                                |"{:06}"     21    <- '000021'
+logging.basicConfig(level=logging.DEBUG)       |"{: 6.2f}"   7.   <- '  7.00'                       | datetime.now(
+> methods                                      |"{: 6}"     21    <- '    21'                       |     datetime.timezone.utc
+10 logger.debug                                |"{:06}"     21    <- '000021'                       | ).astimezone().tzinfo  <- local timezone obj!
 20 logger.info                                 |
 30 logger.warning                              |"{:6}"      "xyz" <- 'xyz   '
 40 logger.error                                |"{:^6"      "xyz" <- ' xyz  '
