@@ -48,8 +48,8 @@ class _TopicFormatter:
     # title example: = some text =
     # (start or lookbehind '|')=some text=(lookahead spaces + end or '|')
     _TOKEN_TITLE = ('title', r"(^|(?<=\|))=[^|=]+=(?=\s*($|\|))")
-    # table: long srings of "====" or '|'
-    _TOKEN_TABLE = ('table', r"={3,}|\|")
+    # table: long srings of "====" or "----" or '|'
+    _TOKEN_TABLE = ('table', r"={3,}|-{3,}|\|")
     # note example: > note text
     # (start or lookbehind '|')> the text(lookahead spaces + end or '|')
     _TOKEN_NOTE = ('note', r"(^|(?<=\|))>[^|]*")
