@@ -1,6 +1,6 @@
 -- title: python
 -- descr: python language cheatsheet
--- items: datetime pdb logger format virtualenv argparse
+-- items: pdb logger format virtualenv argparse dis datetime timedelta
 -- keywords: pip
 =====================================================================================================================================================
 = logging tree =                      |= debug =                  |= virtualenv =                   |= datetime =
@@ -10,17 +10,17 @@ import logging_tree                   |pdb.set_trace()            |$ pip install
 logging_tree.printout()                                                                             | datetime.now(tz)   <- tz-aware
 --------------------------------------------------------------------------------------------------- | dt.astimezone()  <- good tz-aware, local tz
 = logging =                                    |= formatting =                                      |                  <- works with naive in 3.6+
-logging.basicConfig(level=logging.DEBUG)       |"{: 6.2f}"   7.   <- '  7.00'                       | datetime.now(
+logging.basicConfig(level=logging.DEBUG)       |"{: 6.2f}"   7.   <- '  7.00'                       | local_tz_obj = datetime.now(
 > methods                                      |"{: 6}"     21    <- '    21'                       |     datetime.timezone.utc
 10 logger.debug                                |"{:06}"     21    <- '000021'                       | ).astimezone().tzinfo  <- local timezone obj!
 20 logger.info                                 |
-30 logger.warning                              |"{:6}"      "xyz" <- 'xyz   '
-40 logger.error                                |"{:^6"      "xyz" <- ' xyz  '
-50 logger.critical                             |"{:_>6"     "xyz" <- '___xyz'
+30 logger.warning                              |"{:6}"      "xyz" <- 'xyz   '                       | datetime.timedelta(
+40 logger.error                                |"{:^6"      "xyz" <- ' xyz  '                       |     days=0, seconds=0, milliseconds=0,
+50 logger.critical                             |"{:_>6"     "xyz" <- '___xyz'                       |     nimutes=0, hours=0, weeks=0)
 logger.exception <- only in exc handlers
-------------------------------------------------------------------------------
-= argparse with subcommands =
-parser = argparse.ArgumentParser(description="App descr")
+------------------------------------------------------------------------------                      |= disassemble =
+= argparse with subcommands =                                                                       | import dis
+parser = argparse.ArgumentParser(description="App descr")                                           | dis.dis(my_func)
 subparsers = parser.addsubparser(desc='command', help="Available commands")
 sub_p_01 = subparsers.add_parser("a", help="descr of cmd 01")
 ...
