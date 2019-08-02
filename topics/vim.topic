@@ -26,3 +26,15 @@
 ... do edit ...
 :%!xxd -r   < convert the hex back to binary
 xxd is actually a unix command
+=====================================================================================
+= normal =
+:normal some string    <- characters =>  as iftyped in normal mode
+= execute =
+:execute "vimscript string"
+:execute "normal! gg/foo<cr>"  <- execute substitutes special characters for normal
+
+= options =
+: set some_opt
+: set           <- all modified options
+: set all       <- all (except term) options
+: setlocal      <- some options are per-buffer
