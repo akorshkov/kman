@@ -13,6 +13,9 @@ import argparse
 import logging
 
 
+logger = logging.getLogger("kman")
+
+
 _COLORS = {
     'BLACK'  : "\033[1;30m", 'D_BLACK'  : "\033[2;30m",
     'RED'    : "\033[1;31m", 'D_RED'    : "\033[2;31m",
@@ -26,6 +29,30 @@ _COLORS = {
     'CLRBLD' : "\033[2m",
     'CLREND' : "\033[0m",
 }
+
+
+def _configure_logging(level):
+
+    # configure log levels
+    logging.basicConfig(
+        level=level,
+        format="[%(asctime)s] %(levelname)s:%(name)s:%(message)s",
+    )
+
+    # make logs colorfull
+    if sys.stderr.isatty():
+        log_colors = {
+            logging.DEBUG:     _COLORS['BLUE'],
+            logging.INFO:      _COLORS['GREEN'],
+            logging.WARNING:   _COLORS['MAGENTA'],
+            logging.ERROR:     _COLORS['RED'],
+            logging.CRITICAL:  _COLORS['CYAN'],
+        }
+        for level, color in log_colors.items():
+            logging.addLevelName(
+                level,
+                "{}{}{}".format(color, logging.getLevelName(level), "\033[0m"))
+
 
 # types of output stream items
 _START_COLOR, _OUT_TEXT, _END_COLOR = range(3)
@@ -420,7 +447,7 @@ def _make_search_pattern(whole_words, text_parts):
 def find_topic_by_name(topics_dirs, topic_name):
     # find topic by name
     #
-    # Returns wither topic file path or None
+    # Returns either topic file path or None
 
     topic_filename = (
         topic_name if topic_name.endswith(".topic") else topic_name + ".topic")
@@ -497,6 +524,36 @@ def find_all_topic_files(topics_dirs):
                     yield os.path.join(dir_name, sub_dir, fname)
 
 
+def get_topics_dirs():
+    """Get list of topics locations."""
+    conf_path = os.path.expanduser("~/.kman.conf")
+    topics_dirs = []
+    if os.path.exists(conf_path):
+        with open(conf_path) as conf_file:
+            for dir_str in conf_file:
+                topics_dir = os.path.expanduser(dir_str).strip()
+                if not os.path.exists(topics_dir):
+                    logger.warning("Topics directory %s (%s) doesn't exist", dir_str, topics_dir)
+                    continue
+                if not os.path.isdir(topics_dir):
+                    logger.warning("Topics directory %s (%s) is not a directory", dir_str, topics_dir)
+                    continue
+                if any(os.path.samefile(topics_dir, x) for x in topics_dirs):
+                    logger.warning("Ignore redundunt topics directory %s (%s)", dir_str, topics_dir)
+                    continue
+                topics_dirs.append(topics_dir)
+    else:
+        logger.debug("Conf file %s not found", conf_path)
+
+    # add default location of topics (those installed together with kman itself)
+    default_topic_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'topics')
+
+    if not any(os.path.samefile(default_topic_dir, x) for x in topics_dirs):
+        topics_dirs.insert(0, default_topic_dir)
+
+    return topics_dirs
+
+
 def main():
     """kman - print cheatsheet topic or list of topics."""
     # parse cmdline arguments
@@ -521,12 +578,10 @@ def main():
 
     args = parser.parse_args()
 
-    logging.basicConfig(
+    _configure_logging(
         level=logging.DEBUG if args.verbose else logging.WARNING)
 
-    topics_dirs = [
-        os.path.expanduser("~/.kman/topics"),
-    ]
+    topics_dirs = get_topics_dirs()
 
     # and do the job
     if args.topic is None:
