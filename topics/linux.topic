@@ -23,3 +23,13 @@ $ ps -efH e                                         |
  e  <- show envs of each process                    |
 -f  <- full format                                  |
 -H  <- show hierarchy (forest)                      |
+-------------------------------------------------------|
+= admin =                                              |
+# usermod -aG lesnik docker,wheel  <- add to groups    |
+
+= mysql =
+# mysql  <- root access
+mysql> CREATE USER 'lesnik'@'localhost' IDENTIFIED BY '1q2w3e';
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'lesnik'@'localhost';
+mysql> UPDATE user SET password=PASSWORD("newpasswd") WHERE User = 'lesnik';
+mysql> DROP USER ‘lesnik’@‘localhost’;

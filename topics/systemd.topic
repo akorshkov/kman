@@ -23,5 +23,6 @@ $ systemctl status <unit>
 ==========================================================================================
 = system log =
 $ journalctl -f     <- view system log (continuous)
+$ journalctl -u unit  <- for specified unit/service
 $ journalctl -b     <- messages from current boot
 $ journalctl -b -2  <- messages from second-previous boot

@@ -6,9 +6,14 @@
 = install =
 $ pip install --user ....           <- cur user (~/.local/...)
 $ pip install "SomeProject"
+$ pip install "SomeProject[XF]"     <- install with optional extra feature
 $ pip install "SomeProject==1.4"
 $ pip install "SomeProject>=1,<2"
 $ pip install "SomeProject~=1.4.2"  <- any 1.4 >= 1.4.2
+$ pip install -e git+https://git.repo/some_pkg.git@feature#egg=SomeProject  # from a branch ???
+$ pip install --no-index --find-links=/local/dir SomeProject
+
+$ pip install --upgrade SomeProject
 
 $ pip freeze > requirements.txt
 $ pip install -r requirements.txt
@@ -20,6 +25,8 @@ $ pip install path/to/SomeProject-1.4.2.tar.gz
 $ pip install path/to/SomeProject-....hwl
 
 = info =
+$ pip list              <- list installed packages
+$ pip check             <- check if all dependencies are satisfied
 $ pip show package      <- info about installed package
 $ pip list --outdated   <- info about packages having higher version on repository
 

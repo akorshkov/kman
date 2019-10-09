@@ -1,0 +1,13 @@
+-- title: snap
+-- descr: advanced package manager for (not only) ubuntu
+-- items: snap
+-- keywords: snap
+--
+==========================================================================================
+= snap =
+$ snap find <search-text>
+$ sudo snap install <package-name>
+$ snap refresh --list            <- snap packages with ready updates
+$ sudo snap refresh <package-name>
+$ snap list
+$ sudo snap remove <package-name>
