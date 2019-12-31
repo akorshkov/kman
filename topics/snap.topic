@@ -6,7 +6,9 @@
 ==========================================================================================
 = snap =
 $ snap find <search-text>
-$ sudo snap install <package-name>
+$ snap info <package>            <- show info (including available versions)
+$ sudo snap install <package-name> --classic  <- use '--classic' by default
+$ sudo snap install <package-name> --channel=<ver>  <- version, from 'info' output
 $ snap refresh --list            <- snap packages with ready updates
 $ sudo snap refresh <package-name>
 $ snap list

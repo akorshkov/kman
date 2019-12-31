@@ -15,13 +15,17 @@ WHITE    : "\033[1;37m"      40-47  <- bg color (rgb)      | $(  ) ==  `   `  <-
 CLREND   : "\033[0m"                                       | [[ ]]  <- adv. conditions
                                                            | (( ))  <- num. conditions
 =============================================================================================================
-= for loop =                             |= debug =
-for i in {1..10}; do some command; done  |set -x
+= for loop =                             |= debug =  |= sudo with wildcards =
+for i in {1..10}; do some command; done  |set -x     |sudo sh -c 'du -hs /var/lib/docker/*'
 for i in {1..10}                         |..code..
 do                                       |set +x
   some command                           |
 done                                     |
 
+= create 4*7 dirs =
+mkdir -p roles/{dep{1..3},master}/{files,templates,defaults,meta,handlers,vars,tasks}
+
 = bashrc =
 > do not save into history commands starting with ' ' and duplicates:
 export HISTCONTROL=ignoreboth
+bash -o pipefail  <- pipeline of several commands return last non-zero exit code
