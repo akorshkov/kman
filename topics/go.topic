@@ -1,0 +1,39 @@
+-- title: go
+-- descr: notes about go language
+===================================================================================
+= nil =
+nil is "zero" value of: pointers, interfaces, maps, slices, channels, functions
+
+= array =
+q := [3]int{1, 2, 3} <- or q:= [...]int{1, 2, 3}
+
+= slice =
+s := []int
+s := make([]int, len, capacity)
+"view" to a part of array
+append - built-in method, appends value, returns (may be new) slice
+
+= map =
+ch_map := map[string]int{'Taotozh': 51, 'Lesnik': 52,}
+ch_map := map[string]int{}     <- empty map
+ch_map := make(map[string]int) <- also empty map
+lvl, ok := ch_map['Lesnik']  <- ok is true if key exists
+ch_map == nil <- same as len(ch_map) == 0
+delete(ch_map, 'some')  <- built-in method of map
+
+! elements of map can be reallocated !
+
+= range examples =
+for i, val := range arr_or_slice {}
+for i := range arr_or_slice {}
+for k, v := range my_map {}
+
+= structure =
+type Item struct {
+    ilvl    int   <- not visible outside of package
+    ReqLlv  int
+    Name    string
+}
+var hat = Item{55, 45, "hemlet")  <- struct value
+fav_hat := &hat  <- pointer to struct value
+fav_hat.ReqLvl   <- same as hat.ReqLvl

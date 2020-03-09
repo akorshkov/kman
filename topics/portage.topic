@@ -1,0 +1,34 @@
+-- portage topic
+================================================================================
+= system summary =
+$ emerge --info
+
+= directories =
+           /etc/portage/                  <- this machine portage conf
+	   .../package.env                  <- can specify per-pkg env vars
+PORTDIR    /usr/portage/                  <- ebuilds, +
+DISTDIR    /usr/portage/distfiles/        <- downloaded distributives
+PKGDIR     /usr/portage/packages/         <- smthn about binary packages
+           /usr/portage/profiles/
+
+
+/var/db/pkg                 <- internal portage db of installed packages
+
+
+
+= variables =
+ACCEPT_KEYWORDS="amd64"  <- package has keywords. This var instructs portage
+   <- to accept pakages having the keyword. If some pkg version has '~amd64'
+   <- but not 'amd64' - it is not stable yet. Use 'package.accepted_keywords' file
+
+
+
+= packages info =
+
+$ equery uses dev-lang/python[-3.4.8] <- descr of use-flags
+
+= search =
+$ emerge --search somename
+$ emerge --searchdesc somename
+
+$ e-file cmd  <- find pkg providing 'cmd'
