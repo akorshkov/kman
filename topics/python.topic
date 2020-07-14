@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.DEBUG)       |"{: 6.2f}"   7.   <- '  7.00'   
 30 logger.warning                              |"{:6}"      "xyz" <- 'xyz   '                       | datetime.timedelta(
 40 logger.error                                |"{:^6}"     "xyz" <- ' xyz  '                       |     days=0, seconds=0, milliseconds=0,
 50 logger.critical                             |"{:_>6}"    "xyz" <- '___xyz'                       |     nimutes=0, hours=0, weeks=0)
-logger.exception <- only in exc handlers
+logger.exception <- only in exc handlers       |"{!r:^6}"   "xyz" <- "'xyz' "
 ------------------------------------------------------------------------------                      |= disassemble =
 = argparse with subcommands =                                                                       | import dis
 parser = argparse.ArgumentParser(description="App descr")                                           | dis.dis(my_func)

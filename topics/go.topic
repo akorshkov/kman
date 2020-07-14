@@ -4,6 +4,8 @@
 = nil =
 nil is "zero" value of: pointers, interfaces, maps, slices, channels, functions
 
+const pi = 3.141592
+
 = array =
 q := [3]int{1, 2, 3} <- or q:= [...]int{1, 2, 3}
 
@@ -12,6 +14,8 @@ s := []int
 s := make([]int, len, capacity)
 "view" to a part of array
 append - built-in method, appends value, returns (may be new) slice
+
+impossible to transfer slice of objects to a slice of different type
 
 = map =
 ch_map := map[string]int{'Taotozh': 51, 'Lesnik': 52,}
@@ -22,6 +26,25 @@ ch_map == nil <- same as len(ch_map) == 0
 delete(ch_map, 'some')  <- built-in method of map
 
 ! elements of map can be reallocated !
+
+= chan =
+deeply integrated with goroutine scheduler.
+ch = make(chan my_type[, capacity])
+ch chan my_type     <- type of ch is the chanel
+out chan<- my_type  <- only write ...
+in  <-chan my_type  <- ... or read is allowed
+ch <-x   <- write to chan
+x = <-ch <- read from chan
+<-ch     <- also read
+close(ch) <- inform no more data will be put into ch
+          <- writes fail, reads return zero values
+x, ok = <-ch  <- to know for sure if chanal was closed
+for x := range ch {...} <- even better
+
+var wg sync.WaitGroup  <- counter to be used by goroutines
+wg.Add(1)              <- call BEFORE goroutine
+defer  wg.Done()       <- call inside goroutine
+wg.Wait()              <- wait all agoroutines to complete
 
 = range examples =
 for i, val := range arr_or_slice {}
@@ -37,3 +60,6 @@ type Item struct {
 var hat = Item{55, 45, "hemlet")  <- struct value
 fav_hat := &hat  <- pointer to struct value
 fav_hat.ReqLvl   <- same as hat.ReqLvl
+
+= error =
+err := fmt.Errorf("some descr: %w", other)  <- wraps other error

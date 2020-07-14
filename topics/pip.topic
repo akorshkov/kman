@@ -29,6 +29,7 @@ $ pip list              <- list installed packages
 $ pip check             <- check if all dependencies are satisfied
 $ pip show package      <- info about installed package
 $ pip list --outdated   <- info about packages having higher version on repository
+$ pip install package==  <- hack, show available versions
 
 
 = setuptools =

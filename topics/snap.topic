@@ -13,3 +13,7 @@ $ snap refresh --list            <- snap packages with ready updates
 $ sudo snap refresh <package-name>
 $ snap list
 $ sudo snap remove <package-name>
+= snapshots operations =
+"copy of configuration data stored by snapd for one or more snaps"
+$ snap saved  <- list of saved snapshots
+$ snap forget <id>  <- delete specified snapshot
