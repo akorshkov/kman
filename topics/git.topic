@@ -29,11 +29,13 @@ $ git submodule foreach --recursive git diff --name-status                |=====
 $ git rebase -i HEAD~5 --exec "git commit --amend --date=now --no-edit"   |                                 |$ git stash pop
 > produces todo-list like                                                 |                                 |$ git stash drop stash@{0}
 pick 8d7c8b7 old_descr                                                    |                                 |$ git stash show -p | git apply
-$ exec git commit --amend --date=now --no-edit <- or -m"new descr"
-...
-
-= log =
-$ git log -G'pattern' -- path/to/file <- commits that contain 'pattern'
-$ git log -S'pattern' -- path/to/file <- .. changed number of occurencies
-$ git log -n10 current..other                  <- commits in 'other' branch
-$ git log -n10 current..other -- path/to/file  <- only affecting file
+$ exec git commit --amend --date=now --no-edit <- or -m"new descr"        |==========================================================================
+...                                                                          |= merge conflict =
+                                                                             |$ git checkout release/7.25
+= log =                                                                      |$ git checkout -b fix_conflict
+$ git log -G'pattern' -- path/to/file <- commits that contain 'pattern'      |$ git merge origin/release/7.20
+$ git log -S'pattern' -- path/to/file <- .. changed number of occurencies    |... fix conflicts
+$ git log -n10 current..other                  <- commits in 'other' branch  |$ git checkout --ours file   <- keep file as it is in 7.25
+$ git log -n10 current..other -- path/to/file  <- only affecting file        |$ git checkout --theirs file
+= show hashes of files =                                                     |$ git commit
+$ git ls-files -s path/to/files                                              |$ git push --set-upstream origin fix_conflict

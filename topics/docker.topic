@@ -1,0 +1,10 @@
+-- title: docker
+-- descr: docker cheatshit
+========================================================================================
+= run =
+$ docker run
+  -it  <- f.e. for bash (or it quits)
+  -v host/path:/container/path
+  -w /container/work/dir
+  artifactory/image/path:and.tag
+  bash  <- command to run inside

@@ -1,0 +1,10 @@
+-- title: gcc
+-- descr: gcc usage examples
+========================================================
+$ g++
+  -o result_filename
+  -DNDEBUG  <- defines NDEBUG
+  -Ipath/to/includes/
+  f1.cpp f2.cpp
+  -lcrypto  <- link with library libcrypto.so
+            <- should be after source files

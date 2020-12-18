@@ -6,10 +6,8 @@
 > list of highlight groups
 :highlight
 
-
 > highlight, but not search
 :match StatusLineTerm /{pattern}/
-
 
 > misc data
 :version
@@ -20,6 +18,10 @@
 = vimscript =
 :echom "some message"
 :messages              <- view messages
+=====================================================================================
+= search =
+/pattern/b+3  <- search and place coursor in begining + 3 characters
+
 =====================================================================================
 = edit hex =
 :%!xxd    <- convert the file to hex format

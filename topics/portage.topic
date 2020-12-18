@@ -27,6 +27,9 @@ ACCEPT_KEYWORDS="amd64"  <- package has keywords. This var instructs portage
 
 $ equery uses dev-lang/python[-3.4.8] <- descr of use-flags
 
+= emerge =
+# emerge --oneshot =app-editors/vim-8.2.0360  <- install specific version
+
 = search =
 $ emerge --search somename
 $ emerge --searchdesc somename
