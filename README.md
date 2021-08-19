@@ -25,5 +25,5 @@ or
 
 2. Link `kman` to some PATH directory:
 ```
-	ln -s ~/.kman/kman ~/.bin/
+	ln -s ~/.kman/kman ~/bin/
 ```

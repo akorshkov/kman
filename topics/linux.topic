@@ -1,13 +1,13 @@
 -- title: linux
 -- descr: misc linux admin commands
--- items: dd chmod chown date mount umount unmount ps mysql
+-- items: dd chmod chown date mount umount unmount ps mysql sudo
 -- keywords: dd chmod chown date mount umount
 --
-=====================================================
-= dd =                                              |
-$ sudo dd bs=4M if=/path/to.iso of=/dev/sdb; sync   |
------------------------------------------------------
-= chmod chown =                                     |
+===================================================================================================
+= dd =                                              |= sudo =
+$ sudo dd bs=4M if=/path/to.iso of=/dev/sdb; sync   |$ sudo -u some_user ...
+----------------------------------------------------|= sudoers format =
+= chmod chown =                                     |User  Host = (run as) NOPASSWD: command
 $ chmod --reference reference/file files/to/mo*ify  |
 -----------------------------------------------------
 = date =                                            |
@@ -27,7 +27,7 @@ $ ps -efH e                                         |
 $ lsof +f -- /path/to/smthn  <- procs that use it
 -------------------------------------------------------|
 = admin =                                              |
-# usermod -aG lesnik docker,wheel  <- add to groups    |
+# usermod -aG docker,wheel lesnik  <- add to groups    |
 
 = mysql =
 # mysql  <- root access
@@ -39,3 +39,6 @@ mysql> DROP USER ‘lesnik’@‘localhost’;
 = timezone =
 $ /usr/share/zoneinfo  <- location of timezone files
 $ TZ=":Pacfic/Aukland" some command  <- env specifying TZ. ":" must be present
+
+= miscelaneous =
+$ tail -n +3  <- output starting from line 3 (skip first lines)
