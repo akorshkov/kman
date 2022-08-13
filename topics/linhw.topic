@@ -3,10 +3,10 @@
 -- items: proc lsmod modinfo tcpdump netstat
 -- keywords: lsmod modinfo tcpdump netstat
 --
-====================================================
-= proc info =
-$ cat /proc/<pid>/maps  <- process memory map
-====================================================
+============================================================================================================================
+= proc info =                                                       |=wi-fi=
+$ cat /proc/<pid>/maps  <- process memory map                       |$ nmcli device wifi list
+====================================================================|# iwlist wlp0s20f3 scan  <- more details about networks
 = lspci =                  |= modules =
 -v <- more info            |$ lsmod modprobe rmmod
 -k <- report kernel module |$ modinfo <mod> <- gives params

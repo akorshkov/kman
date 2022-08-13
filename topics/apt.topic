@@ -15,6 +15,7 @@ $ sudo apt-get autoremove               <- remove outdated packages
 $ sudo do-release-upgrade               <- upgrade major version
 $ apt list --installed
 $ dpkg -l                               <- more low-level
+$ sudo dpkg -i file.deb                 <- install package from deb file
 $ apt list --upgradable
 
 = per-package commands =
@@ -22,6 +23,10 @@ $ apt search sqlitebrowser
 $ apt-cache show package     <- print descr and misc info about package
 $ sudo apt install sqlitebrowser
 $ sudo apt remove vim-tiny
+
+= repos =
+$ sudo add-apt-repository ppa:deadsnakes/ppa
+$ sudo add-apt-repository --remove ppa:deadsnakes/ppa  <- it's in /etc/apt/sources.list.d
 
 ==========================================================================================
 = apt-file =
