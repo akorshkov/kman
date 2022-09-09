@@ -21,6 +21,8 @@
 =====================================================================================
 = search =
 /pattern/b+3  <- search and place coursor in begining + 3 characters
+= replace =
+:%s/\\n/\r/  <- search two chars '\' and 'n' and replace with newline
 
 =====================================================================================
 = edit hex =

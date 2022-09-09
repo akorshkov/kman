@@ -22,7 +22,11 @@ logger.exception <- only in exc handlers       |"{!r:^6}"   "xyz" <- "'xyz' "
 = argparse with subcommands =                                                                       | import dis
 parser = argparse.ArgumentParser(description="App descr")                                           | dis.dis(my_func)
 subparsers = parser.add_subparsers(dest='command', help="Available commands")
-sub_p_01 = subparsers.add_parser("a", help="descr of cmd 01")
-...
+sub_p_01 = subparsers.add_parser("a", help="descr of cmd 01")                                       |= super =
+...                                                                                                 |super().__init__(args)
 sub_p_02 = subparsers.add_parser("b", help="descr of cmd 02")
 sub_p_02.add_argument("arg_name", help="specific for cmd 02")
+
+
+p = re.compile(r"^prefix_(?P<n1>\d).(\w*).suffix$")
+p.match(s, [start_pos, end_pos])   <- if s matches from start

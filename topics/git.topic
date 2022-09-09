@@ -37,5 +37,6 @@ $ git log -G'pattern' -- path/to/file <- commits that contain 'pattern'      |$ 
 $ git log -S'pattern' -- path/to/file <- .. changed number of occurencies    |... fix conflicts
 $ git log -n10 current..other                  <- commits in 'other' branch  |$ git checkout --ours file   <- keep file as it is in 7.25
 $ git log -n10 current..other -- path/to/file  <- only affecting file        |$ git checkout --theirs file
-= show hashes of files =                                                     |$ git commit
-$ git ls-files -s path/to/files                                              |$ git push --set-upstream origin fix_conflict
+$   .. --pretty=[oneline,short,medium,full,fuller,reference,email,raw]       |$ git commit
+= show hashes of files =                                                     |$ git push --set-upstream origin fix_conflict
+$ git ls-files -s path/to/files

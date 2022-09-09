@@ -22,7 +22,8 @@ $ systemctl status <unit>
 # systemctl disable <unit> <- start at boot
 ==========================================================================================
 = system log =
-$ journalctl -f     <- view system log (continuous)
+$ journalctl -f  <- view system log from start (continuous)
+$ journalctl -n10 -f  <- same, similar to "tail -f"
 $ journalctl -u unit  <- for specified unit/service
 $ journalctl -b     <- messages from current boot
 $ journalctl -b -2  <- messages from second-previous boot

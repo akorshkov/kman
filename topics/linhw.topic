@@ -4,7 +4,7 @@
 -- keywords: lsmod modinfo tcpdump netstat
 --
 ============================================================================================================================
-= proc info =                                                       |=wi-fi=
+= proc info =                                                       |= wi-fi =
 $ cat /proc/<pid>/maps  <- process memory map                       |$ nmcli device wifi list
 ====================================================================|# iwlist wlp0s20f3 scan  <- more details about networks
 = lspci =                  |= modules =
@@ -13,10 +13,10 @@ $ cat /proc/<pid>/maps  <- process memory map                       |$ nmcli dev
 -nn <- [vend_id:hw_id]     |/etc/modprobe.f/<mod> <- conf
                            |/etc/conf.d/modules <- ?
 https://pci-ids.ucw.cz <- [vend_id:hw_id] to info about hardware
-====================================================
-= tcpdump =
-$ tcpdump -i eth0 'port 30443' -X
-  -i <interface> or 'any'
+====================================================================|= Network Manager =
+= tcpdump =                                                         |# ls /etc/NetworkManager/system-connections <- files
+$ tcpdump -i eth0 'port 30443' -X                                   |# nmcli c show conn_name
+  -i <interface> or 'any'                                           |# systemctl restart NetworkManager
   -X decode data to ascii strings
 ====================================================
 = netstat =

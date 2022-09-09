@@ -17,6 +17,7 @@ $ apt list --installed
 $ dpkg -l                               <- more low-level
 $ sudo dpkg -i file.deb                 <- install package from deb file
 $ apt list --upgradable
+$ apt list -a package                   <- show available versions
 
 = per-package commands =
 $ apt search sqlitebrowser
@@ -33,5 +34,7 @@ $ sudo add-apt-repository --remove ppa:deadsnakes/ppa  <- it's in /etc/apt/sourc
  <- search package which provides file (the file/package may be not yet installed) ->
 $ sudo apt install apt-file             <- install/prepare the package
 $ sudo apt-file update
+$ apt-file list package                 <- show files installed by package
+$ dpkg-query -L package                 <- show files installed by package
 
 $ apt-file search <pattern>             <- search packages having file
