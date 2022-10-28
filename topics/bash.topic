@@ -17,8 +17,8 @@ CLREND   : "\033[0m"                                       | [[ ]]  <- adv. cond
 =============================================================================================================
 = for loop =                             |= debug =  |= sudo with wildcards =
 for i in {1..10}; do some command; done  |set -x     |sudo sh -c 'du -hs /var/lib/docker/*'
-for i in {1..10}                         |..code..
-do                                       |set +x
+for i in {1..10}                         |..code..   |= measure time =
+do                                       |set +x     |$ time command...
   some command                           |
 done                                     |
 

@@ -1,0 +1,16 @@
+-- title: utils
+-- descr: misc utils cheatsheet
+-- items: pdfunite pdfseparate
+-- keywords: pdf
+--
+====================================================================================================
+= pdf modifications =
+
+$ pdfunite in-1.pdf in-2.pdf in-3.pdf out.pdf  <- merge pdfs
+$ pdfseparate input.pdf output-page%d.pdf  <- split into pages
+ <- reduce size of pdf file. Change olorImageResolution if necessary
+$ gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/printer -dNOPAUSE -dColorImageResolution=100 -dQUIET -dBATCH -sOutputFile=output.pdf input.pdf
+
+= timeshift - ubuntu system backup =
+# timeshift --list  <- list snapshots
+# timeshift --create  <- backup now
