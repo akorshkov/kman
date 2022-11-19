@@ -27,6 +27,8 @@ $ ps -efH e                                         |
 $ lsof +f -- /path/to/smthn  <- procs that use it
 -------------------------------------------------------|
 = admin =                                              |
+# useradd  <- low-level util                           |
+# adduser  <- also set up home dir for new user        |
 # usermod -aG docker,wheel lesnik  <- add to groups    |
 
 = mysql =
