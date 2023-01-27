@@ -1,6 +1,6 @@
 -- title: utils
 -- descr: misc utils cheatsheet
--- items: pdfunite pdfseparate
+-- items: pdfunite pdfseparate timeshift openssl
 -- keywords: pdf
 --
 ====================================================================================================
@@ -15,3 +15,10 @@ $ qpdf --decrypt in.pdf out.pdf  <- (or --replace-input) - remove pdf encryption
 = timeshift - ubuntu system backup =
 # timeshift --list  <- list snapshots
 # timeshift --create  <- backup now
+====================================================================================================
+= openssl =
+$ openssl x509 -text -in some_cert.crt   <- view details of certificate
+$ openssl req -text -in request.csr      <- view certificate sign request
+$ openssl crl -noout -text -in reg.crl   <- view Certificate Revocation List
+$ openssl s_client -connect host:port -showcerts   <- useful tool
+$ openssl ... -noout  <- do not duplicate input into output
