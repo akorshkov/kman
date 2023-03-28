@@ -11,6 +11,9 @@
 	excludesfile = ~/.gitignore_global  <- if can't touch .gitignore
 	editor = vim
 	pager =
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+= ssh remote =
+git remote set-url --push origin git@github.com:akorshkov/neovimconf.git
 =====================================================================================================================================================
 = Common operation =                                                      |> checkout older version or forom different branch
 > amend options                                                           |$ git checkout {revision} -- path/to/file  <- no revision = staging area
