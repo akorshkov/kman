@@ -11,9 +11,9 @@ BLUE     : "\033[1;34m"      5      <- blink               | ${name:?msg_to_die_
 MAGENTA  : "\033[1;35m"      9      <- crossed             | ${name:+word} <- return word if name exists
 CYAN     : "\033[1;36m"      30-37  <- fg color (rgb)      | ${name:=word} <- set $name to word if undefined
 WHITE    : "\033[1;37m"      40-47  <- bg color (rgb)      | $(  ) ==  `   `  <- command substitution
-                             38,48  <- more fg/bg colors   | [  ]   <- condition
-CLREND   : "\033[0m"                                       | [[ ]]  <- adv. conditions
-                                                           | (( ))  <- num. conditions
+                             38,48  <- 256 fg/bg colors:   | [  ]   <- condition
+ <- 38;5;N  N=(36*r + 6*g + b + 16) N(231-255) - grayscale | [[ ]]  <- adv. conditions
+CLREND   : "\033[0m"                                       | (( ))  <- num. conditions
 =============================================================================================================
 = for loop =                             |= debug =  |= sudo with wildcards =
 for i in {1..10}; do some command; done  |set -x     |sudo sh -c 'du -hs /var/lib/docker/*'

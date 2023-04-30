@@ -14,20 +14,20 @@ logging.basicConfig(level=logging.DEBUG)       |"{x: 6.2f}"   7.   <- '  7.00'  
 > methods                                      |"{x: 6}"     21    <- '    21'                      |     datetime.timezone.utc
 10 logger.debug                                |"{x:06}"     21    <- '000021'                      | ).astimezone().tzinfo  <- local timezone obj!
 20 logger.info                                 |
-30 logger.warning                              |"{x:6}"      "xyz" <- 'xyz   '                      | datetime.timedelta(
-40 logger.error                                |"{x:^6}"     "xyz" <- ' xyz  '                      |     days=0, seconds=0, milliseconds=0,
-50 logger.critical                             |"{x:_>6}"    "xyz" <- '___xyz'                      |     nimutes=0, hours=0, weeks=0)
-logger.exception <- only in exc handlers       |"{x=!r:^6}"  "xyz" <- "x='xyz' "
-                                               |"{x=}"       "xyz" <- "x=xyz"                       |
-------------------------------------------------------------------------------                      |= disassemble =
-= argparse with subcommands =                                                                       | import dis
-parser = argparse.ArgumentParser(description="App descr")                                           | dis.dis(my_func)
-subparsers = parser.add_subparsers(dest='command', help="Available commands")
-sub_p_01 = subparsers.add_parser("a", help="descr of cmd 01")                                       |= misc =
-...                                                                                                 |super().__init__(args)
-sub_p_02 = subparsers.add_parser("b", help="descr of cmd 02")                                       |d2 = {**d0, **d1}
-sub_p_02.add_argument("arg_name", help="specific for cmd 02")
-
-
+30 logger.warning                              |"{x:6}"      "xyz" <- 'xyz   '                      | dt.isoformat() -> str
+40 logger.error                                |"{x:^6}"     "xyz" <- ' xyz  '                      | datetime.fromisoformat(str)
+50 logger.critical                             |"{x:_>6}"    "xyz" <- '___xyz'
+logger.exception <- only in exc handlers       |"{x=!r:^6}"  "xyz" <- "x='xyz' "                    | datetime.timedelta(
+                                               |"{x=}"       "xyz" <- "x=xyz"                       |     days=0, seconds=0, milliseconds=0,
+------------------------------------------------------------------------------                      |     nimutes=0, hours=0, weeks=0)
+= argparse with subcommands =                                                                       |
+parser = argparse.ArgumentParser(description="App descr")
+subparsers = parser.add_subparsers(dest='command', help="Available commands")                       |= disassemble =
+sub_p_01 = subparsers.add_parser("a", help="descr of cmd 01")                                       | import dis
+...                                                                                                 | dis.dis(my_func)
+sub_p_02 = subparsers.add_parser("b", help="descr of cmd 02")                                       |
+sub_p_02.add_argument("arg_name", help="specific for cmd 02")                                       |= misc =
+                                                                                                    | super().__init__(args)
+                                                                                                    | d2 = {**d0, **d1}
 p = re.compile(r"^prefix_(?P<n1>\d).(\w*).suffix$")
 p.match(s, [start_pos, end_pos])   <- if s matches from start
