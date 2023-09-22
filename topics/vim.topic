@@ -2,15 +2,12 @@
 -- descr: my vim cheatsheet
 -- items: vim vimscript highlight
 =====================================================================================
+= config =
+:echo $MYVIMRC  <- my init location
+
 = color =
 > list of highlight groups
 :highlight
-
-> highlight, but not search
-:match StatusLineTerm /{pattern}/
-
-> misc data
-:version
 
 > format json
 :execute '%!python -m json.tool'
@@ -23,7 +20,8 @@
 /pattern/b+3  <- search and place coursor in begining + 3 characters
 = replace =
 :%s/\\n/\r/  <- search two chars '\' and 'n' and replace with newline
-
+= highlight, but not search =
+:match StatusLineTerm /{pattern}/
 =====================================================================================
 = edit hex =
 :%!xxd    <- convert the file to hex format
@@ -37,8 +35,14 @@ xxd is actually a unix command
 :execute "vimscript string"
 :execute "normal! gg/foo<cr>"  <- execute substitutes special characters for normal
 
-= options =
-: set some_opt
-: set           <- all modified options
-: set all       <- all (except term) options
-: setlocal      <- some options are per-buffer
+= options =                                    |= in nvim lua =
+:set some_opt                                  |:vim.opt.some_opt = true
+:set           <- all modified options         |
+:set all       <- all (except term) options    |
+:setlocal      <- some options are per-buffer  |
+=====================================================================================
+= diff commands =
+:vertical diffsplit path/to/other/file    <- start diff mode
+:diffthis                                 <- make current window a part of diff
+:diffoff                                  <- exit diff mode in current window
+:diffoff!                                 <- exit diff mode in all windows on screen

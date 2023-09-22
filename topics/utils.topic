@@ -22,3 +22,16 @@ $ openssl req -text -in request.csr      <- view certificate sign request
 $ openssl crl -noout -text -in reg.crl   <- view Certificate Revocation List
 $ openssl s_client -connect host:port -showcerts   <- useful tool
 $ openssl ... -noout  <- do not duplicate input into output
+====================================================================================================
+$ rsync -rva SrcDir/ user@host:TgtDir
+ -v - verbose
+ -p - progress
+ -c - skip based on checksum
+ -a =
+   -r - recursive
+   -l - symplinks as symlinks
+   -p - preserve permissions
+   -t - preserve time
+   -g - preserve group
+   -o - preserve ownwe
+   -D - devices and special files(?)
