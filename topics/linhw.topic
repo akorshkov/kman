@@ -18,7 +18,8 @@ https://pci-ids.ucw.cz <- [vend_id:hw_id] to info about hardware
 $ tcpdump -i eth0 'port 30443' -X                                   |# nmcli c show conn_name
   -i <interface> or 'any'                                           |# systemctl restart NetworkManager
   -X decode data to ascii strings
-====================================================
-= netstat =
-$ netstat -ni   <- list network kernel interface table
-$ netstat -nr   <- list routing tables
+====================================================================
+= netstat =                                                  |$ df -i   <- inodes statistics
+$ netstat -ni   <- list network kernel interface table       |$ lsblk   <- block devices info
+$ netstat -nr   <- list routing tables                       |$ smartctl  <- hdd's hardware info
+$ netstat -tulpn <- list active connections

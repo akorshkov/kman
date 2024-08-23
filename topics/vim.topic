@@ -23,9 +23,9 @@
 = highlight, but not search =
 :match StatusLineTerm /{pattern}/
 =====================================================================================
-= edit hex =
-:%!xxd    <- convert the file to hex format
-... do edit ...
+= edit hex =                                    |= netrw - filesystem =
+:%!xxd    <- convert the file to hex format     |d - create new dir
+... do edit ...                                 |% - create new file
 :%!xxd -r   < convert the hex back to binary
 xxd is actually a unix command
 =====================================================================================
