@@ -12,8 +12,9 @@
 	editor = vim
 	pager =
 -----------------------------------------------------------------------------------------------------------------------------------------------------
-= ssh remote =
-git remote set-url --push origin git@github.com:akorshkov/neovimconf.git
+= command-line config commands =
+$ git remote set-url --push origin git@github.com:akorshkov/neovimconf.git  <- ssh remote
+$ export GIT_EDITOR=vim
 =====================================================================================================================================================
 = Common operation =                                                      |> checkout older version or forom different branch
 > amend options                                                           |$ git checkout {revision} -- path/to/file  <- no revision = staging area

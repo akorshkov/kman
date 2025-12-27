@@ -4,10 +4,13 @@
 =====================================================================================
 = config =
 :echo $MYVIMRC  <- my init location
+$ export NVIM_APPNAME=nv_test    <- nvim reads conf from ~/.config/nv_test
+> $env:NVIM_APPNAME = 'nv_test'  <- same on windows
+$ vim -u NONE  <- start w/o any config
 
 = color =
-> list of highlight groups
-:highlight
+:highlight  <- list of highlight groups
+:colorscheme <tab>  <- available color schemes
 
 > format json
 :execute '%!python -m json.tool'
@@ -17,9 +20,9 @@
 :messages              <- view messages
 =====================================================================================
 = search =
-/pattern/b+3  <- search and place coursor in begining + 3 characters
+/pattern/b+3  <- begining + 3 chars
 = replace =
-:%s/\\n/\r/  <- search two chars '\' and 'n' and replace with newline
+:%s/\\n/\r/  <- ('\', 'n') -> newline
 = highlight, but not search =
 :match StatusLineTerm /{pattern}/
 =====================================================================================
@@ -30,7 +33,7 @@
 xxd is actually a unix command
 =====================================================================================
 = normal =
-:normal some string    <- characters =>  as iftyped in normal mode
+:normal some string    <- characters =>  as if typed in normal mode
 = execute =
 :execute "vimscript string"
 :execute "normal! gg/foo<cr>"  <- execute substitutes special characters for normal
@@ -40,6 +43,11 @@ xxd is actually a unix command
 :set           <- all modified options         |
 :set all       <- all (except term) options    |
 :setlocal      <- some options are per-buffer  |
+= which for keymap =
+:help i_^n   <- builtin keymap, insert mode
+:verbose map g]   <- custom keymap info
+:imap   <- shows all in ins.mode; most reliable
+:verbose command Ss4  <- info about command
 =====================================================================================
 = diff commands =
 :vertical diffsplit path/to/other/file    <- start diff mode
